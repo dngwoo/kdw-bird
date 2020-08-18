@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Link from "next/link";
-import { Menu } from "antd";
+import { Menu, Row, Col, Input } from "antd";
 
 const AppLayout = ({ children }) => (
   <>
@@ -16,13 +16,21 @@ const AppLayout = ({ children }) => (
           <a>Profile</a>
         </Link>
       </Menu.Item>
-      <Menu.Item key="signup">
-        <Link href="signup">
-          <a>SignUp</a>
-        </Link>
+      <Menu.Item key="mail">
+        <Input.Search enterButton style={{ verticalAlign: "middle" }} />
       </Menu.Item>
     </Menu>
-    {children}
+    <Row gutter={8}>
+      <Col xs={24} md={6} style={{ textAlign: "center" }}>
+        왼쪽메뉴
+      </Col>
+      <Col xs={24} md={12} style={{ textAlign: "center" }}>
+        {children}
+      </Col>
+      <Col xs={24} md={6} style={{ textAlign: "center" }}>
+        오른쪽메뉴
+      </Col>
+    </Row>
   </>
 );
 
