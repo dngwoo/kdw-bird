@@ -1,11 +1,11 @@
 import AppLayout from "../components/AppLayout";
 
-const Hello = () => {
+const signup = () => {
   return (
     <AppLayout>
-      <div>Hello! Next</div>
+      <div>sign up page</div>
     </AppLayout>
   );
 };
 
-export default Hello;
+export default signup;
