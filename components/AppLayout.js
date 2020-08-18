@@ -1,11 +1,14 @@
 import React from "react";
 import PropTypes from "prop-types";
+import Link from "next/link";
 
 const AppLayout = ({ children }) => {
   // children = props.children와 같음.
   return (
     <div>
-      <span>공통메뉴</span>
+      <Link href="/">HOME</Link>
+      <Link href="/profile">프로필</Link>
+      <Link href="/signup"> 회원가입</Link>
       {children}
     </div>
   );
