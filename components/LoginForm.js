@@ -1,8 +1,16 @@
 import React, { useCallback } from "react";
 import { Button, Form, Input } from "antd";
 import Link from "next/link";
-
 import useInput from "../hooks/useInput.js";
+import styled from "styled-components";
+
+const ButtonWrapper = styled.div`
+  margin-top: 10px;
+`;
+
+const LgForm = styled(Form)`
+  padding: 10px;
+`;
 
 const LoginForm = () => {
   const [id, onChangeId] = useInput("");
@@ -12,7 +20,7 @@ const LoginForm = () => {
   }, [id, password]);
 
   return (
-    <Form onFinish={onSubmitForm} style={{ padding: "10px" }}>
+    <LgForm onFinish={onSubmitForm}>
       <div>
         <label htmlFor="user-id">아이디</label>
         <br />
@@ -29,7 +37,7 @@ const LoginForm = () => {
           required
         />
       </div>
-      <div style={{ marginTop: "10px" }}>
+      <ButtonWrapper>
         <Button type="primary" htmlType="submit" loading={false}>
           로그인
         </Button>
@@ -38,8 +46,8 @@ const LoginForm = () => {
             <Button>회원가입</Button>
           </a>
         </Link>
-      </div>
-    </Form>
+      </ButtonWrapper>
+    </LgForm>
   );
 };
 
