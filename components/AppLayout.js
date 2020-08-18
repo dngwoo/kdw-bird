@@ -1,22 +1,33 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Link from "next/link";
+import { Menu } from "antd";
 
-const AppLayout = ({ children }) => {
-  // children = props.children와 같음.
-  return (
-    <div>
-      <Link href="/">HOME</Link>
-      <Link href="/profile">프로필</Link>
-      <Link href="/signup"> 회원가입</Link>
-      {children}
-    </div>
-  );
-};
+const AppLayout = ({ children }) => (
+  <>
+    <Menu mode="horizontal">
+      <Menu.Item key="home">
+        <Link href="/">
+          <a>Home</a>
+        </Link>
+      </Menu.Item>
+      <Menu.Item key="profile">
+        <Link href="/profile">
+          <a>Profile</a>
+        </Link>
+      </Menu.Item>
+      <Menu.Item key="signup">
+        <Link href="signup">
+          <a>SignUp</a>
+        </Link>
+      </Menu.Item>
+    </Menu>
+    {children}
+  </>
+);
 
 AppLayout.propTypes = {
   children: PropTypes.node.isRequired,
-  // node 라는 것은 리액트로 그리는 모든 것들이 node임.(return 안에 들어가는 모든것)
 };
 
 export default AppLayout;

@@ -9,6 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@ant-design/icons": "^4.2.2",
+    "antd": "^4.5.4",
     "next": "^9.5.2",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",

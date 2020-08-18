@@ -1,11 +1,16 @@
+import React from "react";
 import AppLayout from "../components/AppLayout";
+import Head from "next/head";
 
-const profile = () => {
+const Profile = () => {
   return (
     <AppLayout>
-      <div> profile page</div>
+      <Head>
+        <title>KdwBird | Profile</title>
+      </Head>
+      <div>Profile</div>
     </AppLayout>
   );
 };
 
-export default profile;
+export default Profile;

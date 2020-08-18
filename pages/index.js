@@ -1,11 +1,16 @@
+import React from "react";
 import AppLayout from "../components/AppLayout";
+import Head from "next/head";
 
-const Hello = () => {
+const Home = () => {
   return (
     <AppLayout>
-      <div>Hello! Next</div>
+      <Head>
+        <title>KdwBird</title>
+      </Head>
+      <div>Home</div>
     </AppLayout>
   );
 };
 
-export default Hello;
+export default Home;

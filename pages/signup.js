@@ -1,11 +1,16 @@
+import React from "react";
 import AppLayout from "../components/AppLayout";
+import Head from "next/head";
 
-const signup = () => {
+const SignUp = () => {
   return (
     <AppLayout>
-      <div>sign up page</div>
+      <Head>
+        <title>KdwBird | SignUp</title>
+      </Head>
+      <div>SignUp Page</div>
     </AppLayout>
   );
 };
 
-export default signup;
+export default SignUp;
