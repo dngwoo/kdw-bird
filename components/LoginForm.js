@@ -12,11 +12,13 @@ const LgForm = styled(Form)`
   padding: 10px;
 `;
 
-const LoginForm = () => {
+const LoginForm = ({ setIsLoggedIn }) => {
   const [id, onChangeId] = useInput("");
   const [password, onChangePassword] = useInput("");
+
   const onSubmitForm = useCallback(() => {
     console.log({ id, password });
+    setIsLoggedIn(true);
   }, [id, password]);
 
   return (
