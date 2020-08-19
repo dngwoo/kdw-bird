@@ -3,6 +3,7 @@ import { Button, Form, Input } from "antd";
 import Link from "next/link";
 import useInput from "../hooks/useInput.js";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 
 const ButtonWrapper = styled.div`
   margin-top: 10px;
@@ -51,6 +52,10 @@ const LoginForm = ({ setIsLoggedIn }) => {
       </ButtonWrapper>
     </LgForm>
   );
+};
+
+LoginForm.propTypes = {
+  setIsLoggedIn: PropTypes.func.isRequired,
 };
 
 export default LoginForm;

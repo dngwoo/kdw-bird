@@ -5,6 +5,7 @@ import {
   FacebookFilled,
   GoogleCircleFilled,
 } from "@ant-design/icons";
+import PropTypes from "prop-types";
 
 const UserProfile = ({ setIsLoggedIn }) => {
   const onLogout = useCallback(() => {
@@ -31,6 +32,10 @@ const UserProfile = ({ setIsLoggedIn }) => {
       </Card>
     </>
   );
+};
+
+UserProfile.propTypes = {
+  setIsLoggedIn: PropTypes.func.isRequired,
 };
 
 export default UserProfile;
