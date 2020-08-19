@@ -29,17 +29,17 @@ const AppLayout = ({ children }) => {
         </Menu.Item>
       </Menu>
       <Row gutter={8}>
-        <Col xs={24} md={6} style={{ textAlign: "center" }}>
+        <Col xs={24} md={6}>
           {isLoggedIn ? (
             <UserProfile setIsLoggedIn={setIsLoggedIn} />
           ) : (
             <LoginForm setIsLoggedIn={setIsLoggedIn} />
           )}
         </Col>
-        <Col xs={24} md={12} style={{ textAlign: "center" }}>
+        <Col xs={24} md={12}>
           {children}
         </Col>
-        <Col xs={24} md={6} style={{ textAlign: "center" }}>
+        <Col xs={24} md={6}>
           <a href="#" target="_blank" rel="noreferrer noopenner">
             Made By DongWoo
           </a>
