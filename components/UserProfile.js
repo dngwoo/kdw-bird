@@ -5,11 +5,13 @@ import {
   FacebookFilled,
   GoogleCircleFilled,
 } from "@ant-design/icons";
-import PropTypes from "prop-types";
+import { logoutAction } from "../reducers";
+import { useDispatch } from "react-redux";
 
-const UserProfile = ({ setIsLoggedIn }) => {
+const UserProfile = () => {
+  const dispatch = useDispatch();
   const onLogout = useCallback(() => {
-    setIsLoggedIn(false);
+    dispatch(logoutAction);
   }, []);
 
   return (
@@ -32,10 +34,6 @@ const UserProfile = ({ setIsLoggedIn }) => {
       </Card>
     </>
   );
-};
-
-UserProfile.propTypes = {
-  setIsLoggedIn: PropTypes.func.isRequired,
 };
 
 export default UserProfile;
