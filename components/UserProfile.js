@@ -5,7 +5,7 @@ import {
   FacebookFilled,
   GoogleCircleFilled,
 } from "@ant-design/icons";
-import { logoutAction } from "../reducers";
+import { logoutAction } from "../reducers/user";
 import { useDispatch } from "react-redux";
 
 const UserProfile = () => {
