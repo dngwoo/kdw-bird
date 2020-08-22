@@ -1,6 +1,5 @@
 import React from "react";
 import AppLayout from "../components/AppLayout";
-import Head from "next/head";
 import { useSelector } from "react-redux";
 import PostForm from "../components/PostForm";
 import PostCard from "../components/PostCard";
@@ -8,11 +7,9 @@ import PostCard from "../components/PostCard";
 const Home = () => {
   const { isLoggedIn } = useSelector((state) => state.user);
   const { mainPosts } = useSelector((state) => state.post);
+  console.log(mainPosts);
   return (
     <AppLayout>
-      <Head>
-        <title>KdwBird</title>
-      </Head>
       {/* 로그인되었을 경우 PostForm 출력 */}
       {isLoggedIn && <PostForm />}
 

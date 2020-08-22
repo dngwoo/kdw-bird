@@ -2,7 +2,7 @@ const initialState = {
   mainPosts: [
     {
       id: 1,
-      User: { id: 1, nickname: "제로초" },
+      User: { id: "1", nickname: "김동우" },
       content: "첫 번째 게시글 #해시태그 #익스프레스",
       Images: [
         {
@@ -43,19 +43,23 @@ const dummyPost = {
   id: 2,
   User: {
     id: 2,
-    nickname: "nero",
+    nickname: "김동우",
   },
   content: "더미데이터입니다.",
-  images: [],
+  Images: [],
   Comments: [],
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case ADD_POST:
-      return { dummyPost, ...state.mainPosts, postAdded: true };
+      return {
+        ...state,
+        mainPosts: [dummyPost, ...state.mainPosts],
+        postAdded: true,
+      };
     default:
-      return state;
+      return { ...state };
   }
 };
 
