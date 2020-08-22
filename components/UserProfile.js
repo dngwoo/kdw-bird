@@ -17,7 +17,6 @@ const UserProfile = () => {
   return (
     <>
       <Card
-        style={{ width: 300 }}
         actions={[
           <TwitterCircleFilled key="twit" />,
           <FacebookFilled key="followings" />,
