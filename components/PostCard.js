@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from "react";
-import { Card, Popover, Button, Avatar } from "antd";
+import { Card, Popover, Button, Avatar, List, Comment } from "antd";
 import {
   RetweetOutlined,
   HeartOutlined,
@@ -10,16 +10,22 @@ import {
 import PostImages from "./PostImages";
 import { useSelector } from "react-redux";
 import PropTypes from "prop-types";
+import CommentForm from "./CommentForm";
 
 const PostCard = ({ post }) => {
   const id = useSelector((state) => state.user.me && state.user.me.id);
 
   const [liked, setLiked] = useState(false);
-
   const onToggleLike = useCallback(() => setLiked((prev) => !prev), []);
 
+  const [commentFormOpened, setCommentFormOpened] = useState(false);
+  const onToggleComment = useCallback(
+    () => setCommentFormOpened((prev) => !prev),
+    []
+  );
+
   return (
-    <div>
+    <>
       <Card
         cover={post.Images[0] && <PostImages images={post.Images} />}
         actions={[
@@ -33,7 +39,7 @@ const PostCard = ({ post }) => {
           ) : (
             <HeartOutlined key="heart" onClick={onToggleLike} />
           ),
-          <MessageOutlined key="comment" />,
+          <MessageOutlined key="comment" onClick={onToggleComment} />,
           <Popover
             key="more"
             content={
@@ -59,9 +65,28 @@ const PostCard = ({ post }) => {
           description={post.content}
         ></Card.Meta>
       </Card>
+      {commentFormOpened && (
+        <>
+          <CommentForm />
+          <List
+            header={`${post.Comments.length}개의 댓글`}
+            itemLayout="horizontal"
+            dataSource={post.Comments}
+            renderItem={(item) => (
+              <List.Item>
+                <Comment
+                  author={item.User.nickname}
+                  avatar={<Avatar>{item.User.nickname[0]}</Avatar>}
+                  content={item.content}
+                />
+              </List.Item>
+            )}
+          />
+        </>
+      )}
       {/* <CommentForm />
       <Comments /> */}
-    </div>
+    </>
   );
 };
 
@@ -70,6 +95,7 @@ PostCard.propTypes = {
     User: PropTypes.object,
     content: PropTypes.string,
     Images: PropTypes.arrayOf(PropTypes.any),
+    Comments: PropTypes.arrayOf(PropTypes.any),
   }),
 };
 
