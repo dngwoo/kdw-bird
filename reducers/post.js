@@ -7,15 +7,13 @@ const initialState = {
       Images: [
         {
           src:
-            "https://www.google.com/url?sa=i&url=https%3A%2F%2Ftheoceanagency.org%2Fresources-1&psig=AOvVaw1CiObsphDkaRocbhTjD7X3&ust=1598104441431000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCKj83Iy5rOsCFQAAAAAdAAAAABAI",
+            "https://bookthumb-phinf.pstatic.net/cover/137/995/13799585.jpg?udate=20180726",
         },
         {
-          src:
-            "https://www.google.com/url?sa=i&url=https%3A%2F%2Ftheoceanagency.org%2Fresources-1&psig=AOvVaw1CiObsphDkaRocbhTjD7X3&ust=1598104441431000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCKj83Iy5rOsCFQAAAAAdAAAAABAI",
+          src: "https://gimg.gilbut.co.kr/book/BN001958/rn_view_BN001958.jpg",
         },
         {
-          src:
-            "https://www.google.com/url?sa=i&url=https%3A%2F%2Ftheoceanagency.org%2Fresources-1&psig=AOvVaw1CiObsphDkaRocbhTjD7X3&ust=1598104441431000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCKj83Iy5rOsCFQAAAAAdAAAAABAI",
+          src: "https://gimg.gilbut.co.kr/book/BN001998/rn_view_BN001998.jpg",
         },
       ],
       Comments: [
