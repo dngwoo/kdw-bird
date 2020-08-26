@@ -1,17 +1,18 @@
-import { all, fork, call, take, put } from "redux=saga/effects";
+import { all, fork, call, put, delay, takeLatest } from "redux-saga/effects";
 import axios from "axios";
 
 // login
-function logInAPI(data) {
-  return axios.post("/api/login", data);
-}
+// function logInAPI(data) {
+//   return axios.post("/api/login", data);
+// }
 
 function* logIn(action) {
+  yield delay(1000);
   try {
-    const result = yield call(logInAPI, action.data);
+    // const result = yield call(logInAPI, action.data);
     yield put({
       type: "LOG_IN_SUCCESS",
-      data: result.data,
+      //   data: result.data,
     });
   } catch (error) {
     yield put({
@@ -22,20 +23,21 @@ function* logIn(action) {
 }
 
 function* watchLogin() {
-  yield take("LOG_IN_REQUEST", logIn);
+  yield takeLatest("LOG_IN_REQUEST", logIn);
 }
 
 // logout
-function logOutAPI() {
-  return axios.post("/api/logout");
-}
+// function logOutAPI() {
+//   return axios.post("/api/logout");
+// }
 
 function* logOut() {
+  yield delay(1000);
   try {
-    const result = yield call(logOutAPI);
+    // const result = yield call(logOutAPI);
     yield put({
       type: "LOG_OUT_SUCCESS",
-      data: result.data,
+      //   data: result.data,
     });
   } catch (error) {
     yield put({
@@ -46,20 +48,21 @@ function* logOut() {
 }
 
 function* watchLogOut() {
-  yield take("LOG_OUT_REQUEST", logOut);
+  yield takeLatest("LOG_OUT_REQUEST", logOut);
 }
 
 // addPost
-function addPostAPI(data) {
-  return axios.post("/api/post", data);
-}
+// function addPostAPI(data) {
+//   return axios.post("/api/post", data);
+// }
 
 function* addPost(action) {
+  yield delay(1000);
   try {
-    const result = yield call(addPostAPI, action.data);
+    // const result = yield call(addPostAPI, action.data);
     yield put({
       type: "ADD_POST_SUCCESS",
-      data: result.data,
+      //   data: result.data,
     });
   } catch (error) {
     yield put({
@@ -70,7 +73,7 @@ function* addPost(action) {
 }
 
 function* watchAddPost() {
-  yield take("ADD_POST_REQUEST", addPost);
+  yield takeLatest("ADD_POST_REQUEST", addPost);
 }
 
 // saga사용방법
