@@ -14,9 +14,8 @@ import {
 const Imageszoom = ({ images, onClose }) => {
   // 현재 슬라이드 위치를 표시하기 위한 state
   const [currentSlide, setCurrentSlide] = useState(0);
-
   return (
-    <Overlay>
+    <Overlay style={{ zIndex: 3000 }}>
       <Global />
       <Header>
         <h1>상세 이미지</h1>
@@ -25,7 +24,9 @@ const Imageszoom = ({ images, onClose }) => {
       <SlickWrapper>
         <Slick
           initialSlide={0}
-          beforeChange={(slide) => setCurrentSlide(slide)}
+          beforeChange={(prevSlide, currentSlide) =>
+            setCurrentSlide(currentSlide)
+          }
           infinite
           arrows={false}
           slidesToShow={1}
