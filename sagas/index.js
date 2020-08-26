@@ -2,13 +2,13 @@ import { all, fork, call, take, put } from "redux=saga/effects";
 import axios from "axios";
 
 // login
-function logInAPI() {
-  return axios.post("/api/login");
+function logInAPI(data) {
+  return axios.post("/api/login", data);
 }
 
-function* logIn() {
+function* logIn(action) {
   try {
-    const result = yield call(logInAPI);
+    const result = yield call(logInAPI, action.data);
     yield put({
       type: "LOG_IN_SUCCESS",
       data: result.data,
@@ -50,13 +50,13 @@ function* watchLogOut() {
 }
 
 // addPost
-function addPostAPI() {
-  return axios.post("/api/post");
+function addPostAPI(data) {
+  return axios.post("/api/post", data);
 }
 
-function* addPost() {
+function* addPost(action) {
   try {
-    const result = yield call(addPostAPI);
+    const result = yield call(addPostAPI, action.data);
     yield put({
       type: "ADD_POST_SUCCESS",
       data: result.data,
