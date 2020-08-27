@@ -7,7 +7,6 @@ import PostCard from "../components/PostCard";
 const Home = () => {
   const { isLoggedIn } = useSelector((state) => state.user);
   const { mainPosts } = useSelector((state) => state.post);
-  console.log(mainPosts);
   return (
     <AppLayout>
       {/* 로그인되었을 경우 PostForm 출력 */}

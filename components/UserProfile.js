@@ -5,13 +5,15 @@ import {
   FacebookFilled,
   GoogleCircleFilled,
 } from "@ant-design/icons";
-import { logoutAction } from "../reducers/user";
-import { useDispatch } from "react-redux";
+import { logoutRequestAction } from "../reducers/user";
+import { useDispatch, useSelector } from "react-redux";
 
 const UserProfile = () => {
   const dispatch = useDispatch();
-  const onLogout = useCallback(() => {
-    dispatch(logoutAction);
+  const { me, isLoggingOut } = useSelector((state) => state.user);
+
+  const onLogOut = useCallback(() => {
+    dispatch(logoutRequestAction);
   }, []);
 
   return (
@@ -25,11 +27,15 @@ const UserProfile = () => {
       >
         <Card.Meta
           avatar={
-            <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+            <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png">
+              {me.nickname[0]}
+            </Avatar>
           }
-          title="김동우님 환영합니다!"
+          title={`${me.nickname}님 환영합니다.`}
         ></Card.Meta>
-        <Button onClick={onLogout}>로그아웃</Button>
+        <Button onClick={onLogOut} loading={isLoggingOut}>
+          로그아웃
+        </Button>
       </Card>
     </>
   );

@@ -1,5 +1,6 @@
 import { call, fork, takeLatest, delay, put, all } from "redux-saga/effects";
 import axios from "axios";
+import { Result } from "antd";
 
 // login
 // function logInAPI(data) {
@@ -12,7 +13,8 @@ function* logIn(action) {
     // const result = yield call(logInAPI, action.data);
     yield put({
       type: "LOG_IN_SUCCESS",
-      //   data: result.data,
+      // data: result.data,
+      data: action.data, // 더미데이터를 위해서 action.data를 씀.
     });
   } catch (error) {
     yield put({
