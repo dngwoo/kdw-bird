@@ -50,7 +50,7 @@ export const logoutRequestAction = { type: LOG_OUT_REQUEST };
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     // 규칙성이 보임.
-    // Request 에서는 login 관련된 state 3개를 초기화
+    // Request 에서는 login 관련된 state 3개를 초기화 (성공할지 실패할지 모르기 때문)
     // Success, Failure은 상황에 맞게 state 값을 바꿔준다.
 
     // login

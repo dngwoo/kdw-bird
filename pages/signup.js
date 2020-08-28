@@ -4,13 +4,15 @@ import AppLayout from "../components/AppLayout";
 import Head from "next/head";
 import { Form, Input, Button, Checkbox } from "antd";
 import styled from "styled-components";
+import { useSelector, useDispatch } from "react-redux";
+import { SIGN_UP_REQUEST } from "../reducers/user";
 
 const ErrorMessage = styled.div`
   color: red;
 `;
 
 const SignUp = () => {
-  const [id, onChangeId] = useInput("");
+  const [email, onChangeEmail] = useInput("");
   const [password, onChangePassword] = useInput("");
   const [nickname, onChangeNickname] = useInput("");
 
@@ -32,6 +34,9 @@ const SignUp = () => {
     setTerm(e.target.checked);
   }, []);
 
+  const { signUpLoading } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+
   const onSubmit = useCallback(() => {
     if (password !== passwordCheck) {
       return setPasswordError(true);
@@ -39,7 +44,12 @@ const SignUp = () => {
     if (!term) {
       return setTermError(true);
     }
-    console.log(id, nickname, password, term);
+    console.log(email, nickname, password, term);
+
+    dispatch({
+      type: SIGN_UP_REQUEST,
+      data: { email, password, nickname },
+    });
   }, [password, passwordCheck, term]);
 
   return (
@@ -50,8 +60,13 @@ const SignUp = () => {
       <AppLayout>
         <Form onFinish={onSubmit}>
           <div>
-            <label htmlFor="user-id">Id</label>
-            <Input name="user-id" value={id} onChange={onChangeId}></Input>
+            <label htmlFor="user-email">email</label>
+            <Input
+              name="user-email"
+              value={email}
+              onChange={onChangeEmail}
+              type="email"
+            ></Input>
           </div>
           <div>
             <label htmlFor="user-password">Password</label>
@@ -87,7 +102,7 @@ const SignUp = () => {
             {termError && <ErrorMessage>약관에 동의 해주세요</ErrorMessage>}
           </div>
           <div>
-            <Button type="primary" htmlType="submit">
+            <Button type="primary" htmlType="submit" loading={signUpLoading}>
               가입하기
             </Button>
           </div>
