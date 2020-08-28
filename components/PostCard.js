@@ -1,17 +1,17 @@
-import React, { useState, useCallback } from "react";
-import { Card, Popover, Button, Avatar, List, Comment } from "antd";
+import React, { useState, useCallback } from 'react';
+import { Card, Popover, Button, Avatar, List, Comment } from 'antd';
 import {
   RetweetOutlined,
   HeartOutlined,
   MessageOutlined,
   EllipsisOutlined,
   HeartTwoTone,
-} from "@ant-design/icons";
-import PostImages from "./PostImages";
-import { useSelector } from "react-redux";
-import PropTypes from "prop-types";
-import CommentForm from "./CommentForm";
-import PostCardContent from "./PostCardContent";
+} from '@ant-design/icons';
+import PostImages from './PostImages';
+import { useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
+import CommentForm from './CommentForm';
+import PostCardContent from './PostCardContent';
 
 const PostCard = ({ post }) => {
   const id = useSelector((state) => state.user.me && state.user.me.id);

@@ -1,15 +1,15 @@
-import { call, fork, takeLatest, delay, put, all } from "redux-saga/effects";
-import axios from "axios";
+import { call, fork, takeLatest, delay, put, all } from 'redux-saga/effects';
+import axios from 'axios';
 import {
   ADD_POST_REQUEST,
   ADD_POST_SUCCESS,
   ADD_POST_FAILURE,
-} from "../reducers/post";
+} from '../reducers/post';
 import {
   ADD_COMMENT_SUCCESS,
   ADD_COMMENT_FAILURE,
   ADD_COMMENT_REQUEST,
-} from "../reducers/post";
+} from '../reducers/post';
 
 // addPost
 // function addPostAPI(data) {

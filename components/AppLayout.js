@@ -1,11 +1,11 @@
-import React from "react";
-import Link from "next/link";
-import PropTypes from "prop-types";
-import { Menu, Row, Col, Input } from "antd";
-import LoginForm from "../components/LoginForm";
-import UserProfile from "../components/UserProfile";
-import styled from "styled-components";
-import { useSelector } from "react-redux";
+import React from 'react';
+import Link from 'next/link';
+import PropTypes from 'prop-types';
+import { Menu, Row, Col, Input } from 'antd';
+import LoginForm from '../components/LoginForm';
+import UserProfile from '../components/UserProfile';
+import styled from 'styled-components';
+import { useSelector } from 'react-redux';
 
 const SearchInput = styled(Input.Search)`
   vertical-align: middle;

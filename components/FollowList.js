@@ -1,19 +1,19 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { List, Button, Card } from "antd";
-import { StopOutlined } from "@ant-design/icons";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { List, Button, Card } from 'antd';
+import { StopOutlined } from '@ant-design/icons';
 
 const FollowList = ({ header, data }) => {
   return (
     <List
-      style={{ marginBottom: "10px" }}
+      style={{ marginBottom: '10px' }}
       grid={{ gutter: 16, xs: 2, md: 3 }}
       size="small"
       header={<div>{header}</div>}
       bordered
       dataSource={data}
       loadMore={
-        <div style={{ margin: "10px 0px", textAlign: "center" }}>
+        <div style={{ margin: '10px 0px', textAlign: 'center' }}>
           <Button>더 보기</Button>
         </div>
       }

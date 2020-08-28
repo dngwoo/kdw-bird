@@ -1,19 +1,19 @@
-import React, { useCallback, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { Button, Form, Input } from "antd";
-import { addPost } from "../reducers/post";
-import useInput from "../hooks/useInput";
+import React, { useCallback, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { Button, Form, Input } from 'antd';
+import { addPost } from '../reducers/post';
+import useInput from '../hooks/useInput';
 
 const PostForm = () => {
   const { imagePaths, addPostDone, addPostLoading } = useSelector(
     (state) => state.post
   );
 
-  const [text, onChangeText, setText] = useInput("");
+  const [text, onChangeText, setText] = useInput('');
 
   useEffect(() => {
     if (addPostDone) {
-      setText("");
+      setText('');
     }
   }, [addPostDone]);
 
@@ -24,7 +24,7 @@ const PostForm = () => {
 
   return (
     <Form
-      style={{ margin: "10px 0 20px" }}
+      style={{ margin: '10px 0 20px' }}
       encType="multipart/form-data"
       onFinish={onSubmit}
     >
@@ -41,7 +41,7 @@ const PostForm = () => {
           loading={addPostLoading}
           type="primary"
           htmlType="submit"
-          style={{ float: "right" }}
+          style={{ float: 'right' }}
         >
           짹짹
         </Button>

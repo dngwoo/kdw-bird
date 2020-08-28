@@ -1,24 +1,24 @@
-import React, { useState, useCallback } from "react";
-import useInput from "../hooks/useInput";
-import AppLayout from "../components/AppLayout";
-import Head from "next/head";
-import { Form, Input, Button, Checkbox } from "antd";
-import styled from "styled-components";
-import { useSelector, useDispatch } from "react-redux";
-import { SIGN_UP_REQUEST } from "../reducers/user";
+import React, { useState, useCallback } from 'react';
+import useInput from '../hooks/useInput';
+import AppLayout from '../components/AppLayout';
+import Head from 'next/head';
+import { Form, Input, Button, Checkbox } from 'antd';
+import styled from 'styled-components';
+import { useSelector, useDispatch } from 'react-redux';
+import { SIGN_UP_REQUEST } from '../reducers/user';
 
 const ErrorMessage = styled.div`
   color: red;
 `;
 
 const SignUp = () => {
-  const [email, onChangeEmail] = useInput("");
-  const [password, onChangePassword] = useInput("");
-  const [nickname, onChangeNickname] = useInput("");
+  const [email, onChangeEmail] = useInput('');
+  const [password, onChangePassword] = useInput('');
+  const [nickname, onChangeNickname] = useInput('');
 
   // 커스텀 훅은 사용 못함. 조금 로직이 다르기 때문.
   const [passwordError, setPasswordError] = useState(false);
-  const [passwordCheck, setPasswordCheck] = useState("");
+  const [passwordCheck, setPasswordCheck] = useState('');
   const onChangePasswordCheck = useCallback(
     (e) => {
       setPasswordError(e.target.value !== password);

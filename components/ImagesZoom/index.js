@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
-import Slick from "react-slick";
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+import Slick from 'react-slick';
 import {
   Global,
   Overlay,
@@ -9,7 +9,7 @@ import {
   Indicator,
   ImageWrapper,
   CloseBtn,
-} from "./styles";
+} from './styles';
 
 const Imageszoom = ({ images, onClose }) => {
   // 현재 슬라이드 위치를 표시하기 위한 state
