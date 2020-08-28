@@ -58,8 +58,8 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         logInLoading: true,
-        logInError: null,
         logInDone: false,
+        logInError: null,
       };
     case LOG_IN_SUCCESS:
       return {
