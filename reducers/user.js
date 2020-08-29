@@ -128,7 +128,16 @@ const reducer = (state = initialState, action) => {
 
     // 포스트 추가한것 user에 추가
     case ADD_POST_TO_ME:
+      // action.data는 sagas/post.js에서 만든 shortId. 실제에서는 해당 post의 id가 됨.
       return { ...state, me: { ...state.me, Posts: [{id :  action.data}, ...state.me.Posts]} };  
+
+    case REMOVE_POST_OF_ME:
+      return {
+        ...state,
+        me: {
+          ...state.me, Posts: state.me.Posts.filter(v=>v.id !== action.data)
+        }
+      };   
 
     // default
     default:

@@ -8,14 +8,15 @@ import {
   HeartTwoTone,
 } from '@ant-design/icons';
 import PostImages from './PostImages';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import CommentForm from './CommentForm';
 import PostCardContent from './PostCardContent';
+import { REMOVE_POST_REQUEST, REMOVE_COMMENT_REQUEST } from '../reducers/post';
 
 const PostCard = ({ post }) => {
-  const id = useSelector((state) => state.user.me && state.user.me.id);
-
+  const id = useSelector((state) => state.user.me?.id);
+  const {removePostLoading, removeCommentLoading} = useSelector((state)=> state.post);
   const [liked, setLiked] = useState(false);
   const onToggleLike = useCallback(() => setLiked((prev) => !prev), []);
 
@@ -24,7 +25,23 @@ const PostCard = ({ post }) => {
     () => setCommentFormOpened((prev) => !prev),
     []
   );
-  console.log(id, post.User.id);
+  const dispatch = useDispatch();
+
+  // post 삭제
+  const onRemovePost = useCallback(()=>{
+    dispatch({
+      type: REMOVE_POST_REQUEST, // 타입이름은 항상 직관적, 규칙적으로!
+      data: post.id
+    });
+  },[]);
+
+  // comment 삭제
+  const onRemoveComment = useCallback((id)=>{
+    dispatch({
+      type: REMOVE_COMMENT_REQUEST, // 타입이름은 항상 직관적, 규칙적으로!
+      data: id
+    });
+  },[]);
   return (
     <>
       <Card
@@ -48,7 +65,7 @@ const PostCard = ({ post }) => {
                 {id && id === post.User.id ? (
                   <>
                     <Button>수정</Button>
-                    <Button>삭제</Button>
+                    <Button type="danger" onClick={onRemovePost} loading={removePostLoading}>삭제</Button>
                   </>
                 ) : (
                   <Button>신고</Button>
@@ -79,6 +96,18 @@ const PostCard = ({ post }) => {
                   author={item.User.nickname}
                   avatar={<Avatar>{item.User.nickname[0]}</Avatar>}
                   content={item.content}
+                  actions= {[
+                    <Button.Group key="button">
+                    {id && id === item.id ? (
+                      <>
+                        <Button>수정</Button>
+                        <Button type="danger" onClick={onRemoveComment(item.id)} loading={removeCommentLoading}>삭제</Button>
+                      </>
+                    ) : (
+                      <Button>신고</Button>
+                    )}
+                  </Button.Group>
+                  ]}
                 />
               </List.Item>
             )}
@@ -97,6 +126,7 @@ PostCard.propTypes = {
     content: PropTypes.string,
     Images: PropTypes.arrayOf(PropTypes.any),
     Comments: PropTypes.arrayOf(PropTypes.any),
+    id: PropTypes.string
   }),
 };
 

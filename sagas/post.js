@@ -4,13 +4,16 @@ import {
   ADD_POST_REQUEST,
   ADD_POST_SUCCESS,
   ADD_POST_FAILURE,
+  REMOVE_POST_REQUEST,
+  REMOVE_POST_SUCCESS,
+  REMOVE_POST_FAILURE,
 } from '../reducers/post';
 import {
   ADD_COMMENT_SUCCESS,
   ADD_COMMENT_FAILURE,
   ADD_COMMENT_REQUEST,
 } from '../reducers/post';
-import { ADD_POST_TO_ME } from '../reducers/user';
+import { ADD_POST_TO_ME, REMOVE_POST_OF_ME } from '../reducers/user';
 import shortId from 'shortid';
 
 // addPost
@@ -74,6 +77,69 @@ function* watchAddComment() {
   yield takeLatest(ADD_COMMENT_REQUEST, addComment);
 }
 
+// reomvePost
+// function reomveAPI(data) {
+//   return axios.post(`/api/post/${data.postId}/comment`, data);
+// }
+
+function* removePost(action) {
+  yield delay(1000);
+
+  // PostCard 갯수 줄이기
+  try {
+    // const result = yield call(removePostAPI, action.data);
+    yield put({
+      type: REMOVE_POST_SUCCESS,
+      //   data: result.data,
+      data: action.data // 어떤 데이터가 지워지는지에 대한 id 값
+    });
+
+    // userProfile.js에서 짹짹 갯수 줄이기
+    yield put({
+      type: REMOVE_POST_OF_ME,
+      data: action.data // 어떤 데이터가 지워지는지에 대한 id 값
+    });
+
+  } catch (error) {
+    yield put({
+      type: REMOVE_POST_FAILURE,
+      data: error.response.data,
+    });
+  }
+}
+
+
+function* watchRemovePost() {
+  yield takeLatest(REMOVE_POST_REQUEST, removePost);
+}
+
+// reomveComment
+// function reomveAPI(data) {
+//   return axios.post(`/api/post/${data.postId}/comment`, data);
+// }
+
+function* removeComment(action) {
+  yield delay(1000);
+  try {
+    // const result = yield call(removePostAPI, action.data);
+    yield put({
+      type: REMOVE_POST_SUCCESS,
+      //   data: result.data,
+      data: action.data // 어떤 데이터가 지워지는지에 대한 id 값
+    });
+
+  } catch (error) {
+    yield put({
+      type: REMOVE_POST_FAILURE,
+      data: error.response.data,
+    });
+  }
+}
+
+function* watchRemoveComment() {
+  yield takeLatest(REMOVE_POST_REQUEST, removeComment);
+}
+
 export default function* postSaga() {
-  yield all([fork(watchAddPost), fork(watchAddComment)]);
+  yield all([fork(watchAddPost), fork(watchAddComment), fork(watchRemovePost), fork(watchRemoveComment)]);
 }
