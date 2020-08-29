@@ -69,6 +69,15 @@ const dummyPost = (data) => ({
   Comments: [],
 });
 
+const dummyComment = (data) => ({
+  id: shortId.generate(),
+  User: {
+    id: 1,
+    nickname: '김동우',
+  },
+  content: data,
+});
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     // post
@@ -101,12 +110,23 @@ const reducer = (state = initialState, action) => {
         addCommentDone: false,
         addCommentError: null,
       };
-    case ADD_COMMENT_SUCCESS:
+    case ADD_COMMENT_SUCCESS:{
+      // 불변성을 지키기 위해 이렇게 해야 된다. 가독성이 매우 좋지 못하고 불변성 때문에 코딩하기 어렵다.
+      // 불변성을 유지하기 위해서는 바뀌는 부분만 새로운 객체로 생성해주고 바뀌지 않는 부분은 얕은 참조로 유지해줘야 한다. <- 매모리 절약을 위해서이다.
+      // 이것을 쉽게해줄수있는것이 immer 라이브러리 이다.
+      const data = action.data;
+      const postIndex = state.mainPosts.findIndex((v)=> v.id === data.postId); // 몇번째 포스트인지 알아내기 위해.
+      const post = {...state.mainPosts[postIndex]};
+      post.Comments = [dummyComment(data.content), ...post.Comments];
+      const mainPosts = [...state.mainPosts];
+      mainPosts[postIndex] = post;
       return {
         ...state,
+        mainPosts,
         addCommentLoading: false,
         addCommentDone: true,
       };
+    }
     case ADD_COMMENT_FAILURE:
       return {
         ...state,
