@@ -21,11 +21,13 @@ const initialState = {
 };
 
 const dummyUser = (data) => ({
+  // me에 들어가는 더미데이터
   ...data,
+  id:1,
   nickname: '우동우',
   Posts: [],
-  Followings: [],
-  Followers: [],
+  Followings: [{nickname: '부기초1'},{nickname: '부기초2'},{nickname: '부기초3'},{nickname: '부기초4'}],
+  Followers: [{nickname: '부기초1'},{nickname: '부기초2'},{nickname: '부기초3'}],
 });
 
 export const LOG_IN_REQUEST = 'LOG_IN_REQUEST';
@@ -52,6 +54,9 @@ export const UNFOLLOW_REQUEST = 'UNFOLLOW_REQUEST';
 export const UNFOLLOW_SUCCESS = 'UNFOLLOW_SUCCESS';
 export const UNFOLLOW_FAILURE = 'UNFOLLOW_FAILURE';
 
+export const ADD_POST_TO_ME = 'ADD_POST_TO_ME';
+export const REMOVE_POST_OF_ME = 'REMOVE_POST_OF_ME';
+
 export const loginRequestAction = (data) => ({ type: LOG_IN_REQUEST, data });
 export const logoutRequestAction = { type: LOG_OUT_REQUEST };
 
@@ -74,7 +79,7 @@ const reducer = (state = initialState, action) => {
         ...state,
         logInLoading: false,
         logInDone: true,
-        me: dummyUser(action.data),
+        me: dummyUser(action.data), // data 안에는 {email:..., password: ...} 가 들어있음.
       };
     case LOG_IN_FAILURE:
       return {
@@ -120,6 +125,10 @@ const reducer = (state = initialState, action) => {
       return { ...state, changeNickNameLoading: false, changeNickNameDone: true, me: null };
     case CHANGE_NICKNAME_FAILURE:
       return { ...state, changeNickNameLoading: false, changeNickNameError: action.error };  
+
+    // 포스트 추가한것 user에 추가
+    case ADD_POST_TO_ME:
+      return { ...state, me: { ...state.me, Posts: [{id :  action.data}, ...state.me.Posts]} };  
 
     // default
     default:

@@ -3,28 +3,33 @@ import shortId from 'shortid';
 const initialState = {
   mainPosts: [
     {
-      id: 1,
-      User: { id: '1', nickname: '김동우' },
+      id: shortId.generate(),
+      User: { id: 3, nickname: '김동우' },
       content: '첫 번째 게시글 #해시태그 #익스프레스',
       Images: [
         {
+          id: shortId.generate(),
           src:
             'https://bookthumb-phinf.pstatic.net/cover/137/995/13799585.jpg?udate=20180726',
         },
         {
+          id: shortId.generate(),
           src: 'https://gimg.gilbut.co.kr/book/BN001958/rn_view_BN001958.jpg',
         },
         {
+          id: shortId.generate(),
           src: 'https://gimg.gilbut.co.kr/book/BN001998/rn_view_BN001998.jpg',
         },
       ],
       Comments: [
         {
-          User: { nickname: 'nero' },
+          id: shortId.generate(),
+          User: { id: shortId.generate(),nickname: 'nero' },
           content: '우와 개정판이 나왔군요~',
         },
         {
-          User: { nickname: 'hero' },
+          id: shortId.generate(),
+          User: { id: shortId.generate(),nickname: 'hero' },
           content: '얼른 사고 싶어요',
         },
       ],
@@ -59,12 +64,12 @@ export const addComment = (data) => ({
 });
 
 const dummyPost = (data) => ({
-  id: shortId.generate(),
+  id: data.id,
   User: {
-    id: 2,
+    id: 1,
     nickname: '김동우',
   },
-  content: data,
+  content: data.content,
   Images: [],
   Comments: [],
 });
@@ -72,7 +77,7 @@ const dummyPost = (data) => ({
 const dummyComment = (data) => ({
   id: shortId.generate(),
   User: {
-    id: 1,
+    id: shortId.generate(),
     nickname: '김동우',
   },
   content: data,

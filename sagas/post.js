@@ -10,6 +10,8 @@ import {
   ADD_COMMENT_FAILURE,
   ADD_COMMENT_REQUEST,
 } from '../reducers/post';
+import { ADD_POST_TO_ME } from '../reducers/user';
+import shortId from 'shortid';
 
 // addPost
 // function addPostAPI(data) {
@@ -18,12 +20,21 @@ import {
 
 function* addPost(action) {
   yield delay(1000);
+  const id = shortId.generate();
   try {
     // const result = yield call(addPostAPI, action.data);
     yield put({
       type: ADD_POST_SUCCESS,
       //   data: result.data,
-      data: action.data
+      data: {
+        id,
+        content: action.data
+      }
+    });
+
+    yield put({
+      type: ADD_POST_TO_ME,
+      data: id
     });
   } catch (error) {
     yield put({

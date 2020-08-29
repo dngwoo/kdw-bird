@@ -24,7 +24,7 @@ const PostCard = ({ post }) => {
     () => setCommentFormOpened((prev) => !prev),
     []
   );
-
+  console.log(id, post.User.id);
   return (
     <>
       <Card

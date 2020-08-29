@@ -25,7 +25,7 @@ function* logIn(action) {
     yield put({
       type: LOG_IN_SUCCESS,
       // data: result.data,
-      data: action.data, // 더미데이터를 위해서 action.data를 씀.
+      data: action.data, // 더미데이터를 위해서 action.data를 씀. email과 password 전달
     });
   } catch (error) {
     yield put({
