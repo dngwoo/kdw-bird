@@ -1,4 +1,5 @@
 import shortId from 'shortid';
+import { produce } from 'immer';
 
 const initialState = {
   mainPosts: [
@@ -99,109 +100,93 @@ const dummyComment = (data) => ({
   content: data,
 });
 
-const reducer = (state = initialState, action) => {
-  switch (action.type) {
-    // add post
-    case ADD_POST_REQUEST:
-      return {
-        ...state,
-        addPostLoading: true,
-        addPostDone: false,
-        addPostError: null,
-      };
-    case ADD_POST_SUCCESS:
-      return {
-        ...state,
-        mainPosts: [dummyPost(action.data), ...state.mainPosts],
-        addPostLoading: false,
-        addPostDone: true,
-      };
-    case ADD_POST_FAILURE:
-      return {
-        ...state,
-        addPostLoading: false,
-        addPostError: action.error,
-      };
+// 이전상태를 액션을 통해 다음 상태로 만들어내는 함수.
+// 단 불변성은 지켜야함.
+const reducer = (state = initialState, action) => produce(state, (draft)=> {
+    // immer는 알아서 다음상태로 만들어준다.
+    switch (action.type) {
+      // add post
+      case ADD_POST_REQUEST:
+          draft.addPostLoading = true;
+          draft.addPostDone = false;
+          draft.addPostError = null;
+          break;
+      case ADD_POST_SUCCESS:
+          draft.mainPosts.unshift(dummyPost(action.data)); 
+          draft.addPostLoading = false;
+          draft.addPostDone = true;
+          break;
+      case ADD_POST_FAILURE:
+          draft.addPostLoading = false;          
+          draft.addPostError = action.error;
+          break;
 
-      // remove post
-      case REMOVE_POST_REQUEST:
-        return {
-          ...state,
-          removePostLoading: true,
-          removePostDone: false,
-          removePostError: null,
-        };
+        // remove post
+      case REMOVE_POST_REQUEST:  
+          draft.removePostLoading = true;
+          draft.removePostDone = false;
+          draft.removePostError = null;
+          break;  
       case REMOVE_POST_SUCCESS:
-        return {
-          ...state,
-          mainPosts: state.mainPosts.filter(v=>v.id !== action.data),
-          removePostLoading: false,
-          removePostDone: true,
-        };
-      case REMOVE_POST_FAILURE:
-        return {
-          ...state,
-          removePostLoading: false,
-          removePostError: action.error,
-        };
+          draft.mainPosts = draft.mainPosts.filter((v) => v.id !== action.data);
+          draft.removePostLoading = false;
+          draft.removePostDone = true;
+          break;
+        case REMOVE_POST_FAILURE:
+          draft.removePostLoading = false;
+          draft.removePostError = action.error;
+          break;
+  
+      // add comment
+      case ADD_COMMENT_REQUEST: 
+          draft.addCommentLoading = true;
+          draft.addCommentDone = false;
+          draft.addCommentError = null;
+          break;
+      case ADD_COMMENT_SUCCESS: {         
+          const post = draft.mainPosts.find((v) => v.id === action.data.postId);
+          post.Comments.unshift(dummyComment(action.data.content));
+          draft.addCommentLoading = false;
+          draft.addCommentDone = true;
+          break;
+      // const postIndex = state.mainPosts.findIndex((v) => v.id === action.data.postId);
+      // const post = { ...state.mainPosts[postIndex] };
+      // post.Comments = [dummyComment(action.data.content), ...post.Comments];
+      // const mainPosts = [...state.mainPosts];
+      // mainPosts[postIndex] = post;
+      // return {
+      //   ...state,
+      //   mainPosts,
+      //   addCommentLoading: false,
+      //   addCommentDone: true,
+      // };
+      }
+      case ADD_COMMENT_FAILURE:
+          draft.addCommentLoading = false;
+          draft.addCommentError = action.error;
+          break;
+  
+      // // remove comment
+      // case REMOVE_COMMENT_REQUEST:
+      //   draft.removeCommentLoading = true;
+      //   draft.removeCommentDone = false;
+      //   draft.removeCommentError = null;
+      //   break;
+      // case REMOVE_COMMENT_SUCCESS:
+      //   draft.mainPosts.unshift(dummyPost(action.data)) ;
+      //   draft.removeCommentLoading = false;
+      //   draft.removeCommentDone = true;
+      //  break;
+      // case REMOVE_COMMENT_FAILURE:
+      //   draft.removeCommentLoading = false;
+      //   draft.removeCommentError = action.error;
+      //   break;
 
-    // add comment
-    case ADD_COMMENT_REQUEST:
-      return {
-        ...state,
-        addCommentLoading: true,
-        addCommentDone: false,
-        addCommentError: null,
-      };
-    case ADD_COMMENT_SUCCESS:{
-      // 불변성을 지키기 위해 이렇게 해야 된다. 가독성이 매우 좋지 못하고 불변성 때문에 코딩하기 어렵다.
-      // 불변성을 유지하기 위해서는 바뀌는 부분만 새로운 객체로 생성해주고 바뀌지 않는 부분은 얕은 참조로 유지해줘야 한다. <- 매모리 절약을 위해서이다.
-      // 이것을 쉽게해줄수있는것이 immer 라이브러리 이다.
-      const data = action.data;
-      const postIndex = state.mainPosts.findIndex((v)=> v.id === data.postId); // 몇번째 포스트인지 알아내기 위해.
-      const post = {...state.mainPosts[postIndex]};
-      post.Comments = [dummyComment(data.content), ...post.Comments];
-      const mainPosts = [...state.mainPosts];
-      mainPosts[postIndex] = post;
-      return {
-        ...state,
-        mainPosts,
-        addCommentLoading: false,
-        addCommentDone: true,
-      };
+      default:
+        break;
     }
-    case ADD_COMMENT_FAILURE:
-      return {
-        ...state,
-        addCommentLoading: false,
-        addCommentError: action.error,
-      };
+  });
+ 
 
-    // remove comment
-    case REMOVE_COMMENT_REQUEST:
-      return {
-        ...state,
-        removeCommentLoading: true,
-        removeCommentDone: false,
-        removeCommentError: null,
-      };
-    case REMOVE_COMMENT_SUCCESS:{
-      return {
-        ...state,
-        mainPosts: function(){},
-        removeCommentLoading: false,
-        removeCommentDone: true,
-      };
-    }
-    case REMOVE_COMMENT_FAILURE:
-      return {
-        ...state,
-        removeCommentLoading: false,
-        removeCommentError: action.error,
-      };
-    default:
-      return { ...state };
-  }
-};
 
 export default reducer;

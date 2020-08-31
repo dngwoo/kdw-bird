@@ -1,3 +1,5 @@
+import {produce} from 'immer';
+
 const initialState = {
   logInLoading: false, // 로그인 시도중
   logInDone: false,
@@ -60,89 +62,104 @@ export const REMOVE_POST_OF_ME = 'REMOVE_POST_OF_ME';
 export const loginRequestAction = (data) => ({ type: LOG_IN_REQUEST, data });
 export const logoutRequestAction = { type: LOG_OUT_REQUEST };
 
-const reducer = (state = initialState, action) => {
-  switch (action.type) {
-    // 규칙성이 보임.
-    // Request 에서는 login 관련된 state 3개를 초기화 (성공할지 실패할지 모르기 때문)
-    // Success, Failure은 상황에 맞게 state 값을 바꿔준다.
+const reducer = (state = initialState, action) => 
+   produce(state, (draft)=>{
+    switch (action.type) {
+      // 규칙성이 보임.
+      // Request 에서는 login 관련된 state 3개를 초기화 (성공할지 실패할지 모르기 때문)
+      // Success, Failure은 상황에 맞게 state 값을 바꿔준다.
+  
+      // login
+      case LOG_IN_REQUEST:
+        draft.logInLoading = true;
+        draft.logInDone = false;
+        draft.logInError = null;
+        break;
+      case LOG_IN_SUCCESS:
+        draft.logInLoading = false;
+        draft.logInDone = true;
+        draft.me = dummyUser(action.data); // data 안에는 {email:..., password: ...} 가 들어있음.
+        break;
+      case LOG_IN_FAILURE:
+        draft.logInLoading = false,
+        draft.logInError = action.error;
+        break;
+  
+      // logout
+      case LOG_OUT_REQUEST:
+        draft.logOutLoading= true;
+        draft.logOutDone=false;
+        draft.logOutError= null;
+        break;
+      case LOG_OUT_SUCCESS:
+        draft.logOutLoading = false; 
+        draft.logOutDone = true;
+        draft.me = null; 
+        break;
+      case LOG_OUT_FAILURE:
+        draft.logOutLoading = false; 
+        draft.logOutError = action.error; 
+        break;
 
-    // login
-    case LOG_IN_REQUEST:
-      return {
-        ...state,
-        logInLoading: true,
-        logInDone: false,
-        logInError: null,
-      };
-    case LOG_IN_SUCCESS:
-      return {
-        ...state,
-        logInLoading: false,
-        logInDone: true,
-        me: dummyUser(action.data), // data 안에는 {email:..., password: ...} 가 들어있음.
-      };
-    case LOG_IN_FAILURE:
-      return {
-        ...state,
-        logInLoading: false,
-        logInError: action.error,
-      };
+      // signup
+      case SIGN_UP_REQUEST:   
+        draft.signUpLoading = true;
+        draft.signUpDone = false;
+        draft.signUpError = null;
+        break;
+      case SIGN_UP_SUCCESS:
+        draft.signUpLoading = false; 
+        draft.signUpDone = true; 
+        draft.me = null; 
+        break;
+      case SIGN_UP_FAILURE:
+        draft.signUpLoading = false; 
+        draft.signUpError = action.error; 
+        break;
+      case CHANGE_NICKNAME_REQUEST:
+        draft.ChangeNickNameLoading = true;
+        draft.ChangeNickNameDone = false;
+        draft.ChangeNickNameError = null;
+        break;
+      case CHANGE_NICKNAME_SUCCESS:
+        draft.changeNickNameLoading = false; 
+        draft.changeNickNameDone = true; 
+        draft.me = null; 
+        break;
+      case CHANGE_NICKNAME_FAILURE:
+        draft.changeNickNameLoading = false; 
+        draft.changeNickNameError = action.error; 
+        break;
+      // 포스트 추가한것 user에 추가
+      case ADD_POST_TO_ME:
+        // action.data는 sagas/post.js에서 만든 shortId. 실제에서는 해당 post의 id가 됨.
+        draft.me.Posts.unshift({id: action.data});
+        break;
+        // return {
+        //   ...state,
+        //   me: {
+        //     ...state.me,
+        //     Posts: [{ id: action.data }, ...state.me.Posts],
+        //   },
+        // };
+      case REMOVE_POST_OF_ME:
+        draft.me.Posts = draft.me.Posts.filter((v) => v.id !== action.data);
+        break;
+        // return {
+        //   ...state,
+        //   me: {
+        //     ...state.me,
+        //     Posts: state.me.Posts.filter((v) => v.id !== action.data),
+        //   },
+        // };
+        
+  
+      // default
+      default:
+        break;
+    }
+  });
+  
 
-    // logout
-    case LOG_OUT_REQUEST:
-      return {
-        ...state,
-        logOutLoading: true,
-        logOutDone: false,
-        logOutError: null,
-      };
-    case LOG_OUT_SUCCESS:
-      return { ...state, logOutLoading: false, logOutDone: true, me: null };
-    case LOG_OUT_FAILURE:
-      return { ...state, logOutLoading: false, logOutError: action.error };
-
-    // signup
-    case SIGN_UP_REQUEST:
-      return {
-        ...state,
-        signUpLoading: true,
-        signUpDone: false,
-        signUpError: null,
-      };
-    case SIGN_UP_SUCCESS:
-      return { ...state, signUpLoading: false, signUpDone: true, me: null };
-    case SIGN_UP_FAILURE:
-      return { ...state, signUpLoading: false, signUpError: action.error };
-
-    case CHANGE_NICKNAME_REQUEST:
-      return {
-        ...state,
-        ChangeNickNameLoading: true,
-        ChangeNickNameDone: false,
-        ChangeNickNameError: null,
-      };
-    case CHANGE_NICKNAME_SUCCESS:
-      return { ...state, changeNickNameLoading: false, changeNickNameDone: true, me: null };
-    case CHANGE_NICKNAME_FAILURE:
-      return { ...state, changeNickNameLoading: false, changeNickNameError: action.error };  
-
-    // 포스트 추가한것 user에 추가
-    case ADD_POST_TO_ME:
-      // action.data는 sagas/post.js에서 만든 shortId. 실제에서는 해당 post의 id가 됨.
-      return { ...state, me: { ...state.me, Posts: [{id :  action.data}, ...state.me.Posts]} };  
-
-    case REMOVE_POST_OF_ME:
-      return {
-        ...state,
-        me: {
-          ...state.me, Posts: state.me.Posts.filter(v=>v.id !== action.data)
-        }
-      };   
-
-    // default
-    default:
-      return { ...state };
-  }
-};
 
 export default reducer;
