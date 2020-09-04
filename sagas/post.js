@@ -1,4 +1,4 @@
-import { call, fork, takeLatest, delay, put, all } from 'redux-saga/effects';
+import { call, fork, takeLatest, delay, put, all, throttle } from 'redux-saga/effects';
 import axios from 'axios';
 import {
   ADD_POST_REQUEST,
@@ -7,6 +7,10 @@ import {
   REMOVE_POST_REQUEST,
   REMOVE_POST_SUCCESS,
   REMOVE_POST_FAILURE,
+  LOAD_POSTS_SUCCESS,
+  LOAD_POSTS_FAILURE,
+  generateDummyPost,
+  LOAD_POSTS_REQUEST,
 } from '../reducers/post';
 import {
   ADD_COMMENT_SUCCESS,
@@ -140,6 +144,41 @@ function* watchRemoveComment() {
   yield takeLatest(REMOVE_POST_REQUEST, removeComment);
 }
 
+// loadPost
+// function loadPostsAPI(data) {
+//   return axios.post(`/api/posts`, data);
+// }
+
+function* loadPosts(action) {
+  yield delay(1000);
+  try {
+    // const result = yield call(loadPostsAPI, action.data);
+    yield put({
+      type: LOAD_POSTS_SUCCESS,
+      data: generateDummyPost(10)
+    });
+
+  } catch (error) {
+    yield put({
+      type: LOAD_POSTS_FAILURE,
+      data: error.response.data,
+    });
+  }
+}
+
+function* watchLoadPosts() {
+  yield throttle(2000, LOAD_POSTS_REQUEST, loadPosts);
+}
+
+
 export default function* postSaga() {
-  yield all([fork(watchAddPost), fork(watchAddComment), fork(watchRemovePost), fork(watchRemoveComment)]);
+  yield all(
+    [
+      fork(watchLoadPosts), 
+      fork(watchAddPost), 
+      fork(watchAddComment), 
+      fork(watchRemovePost), 
+      fork(watchRemoveComment)
+    ]
+  );
 }
