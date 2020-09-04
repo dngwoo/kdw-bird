@@ -62,8 +62,7 @@ export const REMOVE_POST_OF_ME = 'REMOVE_POST_OF_ME';
 export const loginRequestAction = (data) => ({ type: LOG_IN_REQUEST, data });
 export const logoutRequestAction = { type: LOG_OUT_REQUEST };
 
-const reducer = (state = initialState, action) => 
-   produce(state, (draft)=>{
+const reducer = (state = initialState, action) => produce(state, (draft)=>{
     switch (action.type) {
       // 규칙성이 보임.
       // Request 에서는 login 관련된 state 3개를 초기화 (성공할지 실패할지 모르기 때문)
