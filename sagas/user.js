@@ -11,6 +11,12 @@ import {
   SIGN_UP_SUCCESS,
   SIGN_UP_REQUEST,
   SIGN_UP_FAILURE,
+  FOLLOW_SUCCESS,
+  FOLLOW_FAILURE,
+  UNFOLLOW_SUCCESS,
+  UNFOLLOW_FAILURE,
+  UNFOLLOW_REQUEST,
+  FOLLOW_REQUEST,
 } from '../reducers/user';
 
 // login
@@ -89,6 +95,63 @@ function* watchSignUp() {
   yield takeLatest(SIGN_UP_REQUEST, signUp);
 }
 
+// unFollow
+// function unFollowAPI() {
+//   return axios.post("/api/unFollow");
+// }
+
+function* unFollow(action) {
+  yield delay(1000);
+  try {
+    // const result = yield call(unFollowAPI);
+    yield put({
+      type: UNFOLLOW_SUCCESS,
+        data: action.data, // post.User.id
+    });
+  } catch (error) {
+    yield put({
+      type: UNFOLLOW_FAILURE,
+      data: error.response.data,
+    });
+  }
+}
+
+function* watchUnFollow() {
+  yield takeLatest(UNFOLLOW_REQUEST, unFollow);
+}
+
+// signup
+// function signUpAPI() {
+//   return axios.post("/api/signup");
+// }
+
+function* follow(action) {
+  yield delay(1000);
+  try {
+    // const result = yield call(followAPI);
+    yield put({
+      type: FOLLOW_SUCCESS,
+      data: action.data, // post.User.id
+    });
+  } catch (error) {
+    yield put({
+      type: FOLLOW_FAILURE,
+      data: error.response.data,
+    });
+  }
+}
+
+function* watchFollow() {
+  yield takeLatest(FOLLOW_REQUEST, follow);
+}
+
 export default function* userSaga() {
-  yield all([fork(watchLogin), fork(watchLogOut), fork(watchSignUp)]);
+  yield all(
+    [
+      fork(watchFollow),
+      fork(watchUnFollow),
+      fork(watchLogin), 
+      fork(watchLogOut), 
+      fork(watchSignUp)
+    ]);
 }

@@ -1,6 +1,15 @@
 import {produce} from 'immer';
 
 const initialState = {
+
+  followLoading: false, // 팔로우 시도중
+  followDone: false,
+  followError: null,
+
+  unFollowLoading: false, // 언팔로우 시도중
+  unFollowDone: false,
+  unFollowError: null,
+
   logInLoading: false, // 로그인 시도중
   logInDone: false,
   logInError: null,
@@ -28,8 +37,8 @@ const dummyUser = (data) => ({
   id:1,
   nickname: '우동우',
   Posts: [],
-  Followings: [{nickname: '부기초1'},{nickname: '부기초2'},{nickname: '부기초3'},{nickname: '부기초4'}],
-  Followers: [{nickname: '부기초1'},{nickname: '부기초2'},{nickname: '부기초3'}],
+  Followings: [],
+  Followers: [],
 });
 
 export const LOG_IN_REQUEST = 'LOG_IN_REQUEST';
@@ -67,6 +76,39 @@ const reducer = (state = initialState, action) => produce(state, (draft)=>{
       // 규칙성이 보임.
       // Request 에서는 login 관련된 state 3개를 초기화 (성공할지 실패할지 모르기 때문)
       // Success, Failure은 상황에 맞게 state 값을 바꿔준다.
+
+      //follow
+      case FOLLOW_REQUEST:
+        draft.followLoading = true;
+        draft.followDone = false;
+        draft.followError = null;
+        break;
+      case FOLLOW_SUCCESS:
+        draft.followLoading = false;
+        draft.followDone = true;
+        draft.me.Followings.push({id: action.data}); // post.User.id
+        break;
+      case FOLLOW_FAILURE:
+        draft.followLoading = false,
+        draft.followError = action.error;
+        break;
+
+      //unfollow
+      case UNFOLLOW_REQUEST:
+        draft.unFollowLoading = true;
+        draft.unFollowDone = false;
+        draft.unFollowError = null;
+        break;
+      case UNFOLLOW_SUCCESS:
+        draft.unFollowLoading = false;
+        draft.unFollowDone = true;
+        // 원래는 불변성을 안지키기 위해서 splice 사용하는게 맞음
+        draft.me.Followings = draft.me.Followings.filter(v=> v.id !== action.data); // post.User.id, 해당 id를 가진애 뺴고 다시 반환
+        break;
+      case UNFOLLOW_FAILURE:
+        draft.unFollowLoading = false,
+        draft.unFollowError = action.error;
+        break;
   
       // login
       case LOG_IN_REQUEST:
