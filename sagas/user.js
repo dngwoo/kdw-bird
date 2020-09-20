@@ -1,6 +1,5 @@
 import { call, fork, takeLatest, delay, put, all } from 'redux-saga/effects';
 import axios from 'axios';
-import { Result } from 'antd';
 import {
   LOG_IN_SUCCESS,
   LOG_IN_FAILURE,
@@ -77,15 +76,17 @@ function signUpAPI(data) {
 
 function* signUp(action) {
   try {
-    const result = yield call(signUpAPI(action.data));
+    const result = yield call(signUpAPI, action.data);
+    console.log(result);
     yield put({
       type: SIGN_UP_SUCCESS,
       //   data: result.data,
     });
   } catch (error) {
+    console.log(error.response.data);
     yield put({
       type: SIGN_UP_FAILURE,
-      data: error.response.data,
+      error: error.response.data,
     });
   }
 }

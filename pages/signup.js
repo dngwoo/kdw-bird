@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import useInput from '../hooks/useInput';
 import AppLayout from '../components/AppLayout';
 import Head from 'next/head';
@@ -6,6 +6,7 @@ import { Form, Input, Button, Checkbox } from 'antd';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { SIGN_UP_REQUEST } from '../reducers/user';
+import Router from 'next/router';
 
 const ErrorMessage = styled.div`
   color: red;
@@ -34,7 +35,23 @@ const SignUp = () => {
     setTerm(e.target.checked);
   }, []);
 
-  const { signUpLoading } = useSelector((state) => state.user);
+  const { signUpLoading, signUpDone, signUpError } = useSelector((state) => state.user);
+  
+  useEffect(()=>{
+    // 회원가입이 끝나면 / 로 돌려보낸다. profile.js 와 비슷
+    if(signUpDone){
+      Router.push('/');
+    }
+  }, [signUpDone]);
+
+  useEffect(()=>{
+    // 회원가입 시 에러가 나면 alert로 뿌려줌
+    // err.response.data가 나오는 것임.
+    if(signUpError){
+      alert(signUpError);
+    }
+  }, [signUpError]);
+
   const dispatch = useDispatch();
 
   const onSubmit = useCallback(() => {
@@ -98,7 +115,7 @@ const SignUp = () => {
             ></Input>
           </div>
           <div>
-            <Checkbox value={term} onChange={onChangeTerm}></Checkbox>
+            <Checkbox checked={term} onChange={onChangeTerm}>관리자 말을 잘 들을 것을 동의합니다.</Checkbox>
             {termError && <ErrorMessage>약관에 동의 해주세요</ErrorMessage>}
           </div>
           <div>
