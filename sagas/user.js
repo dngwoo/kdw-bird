@@ -71,14 +71,13 @@ function* watchLogOut() {
 }
 
 // signup
-// function signUpAPI() {
-//   return axios.post("/api/signup");
-// }
+function signUpAPI(data) {
+  return axios.post('http://localhost:3065/user', data); // data가 백엔드에 req.body에 실려서 감.
+}
 
 function* signUp(action) {
-  yield delay(1000);
   try {
-    // const result = yield call(signUpAPI);
+    const result = yield call(signUpAPI(action.data));
     yield put({
       type: SIGN_UP_SUCCESS,
       //   data: result.data,
