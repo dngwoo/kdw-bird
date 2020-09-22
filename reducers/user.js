@@ -68,7 +68,7 @@ export const UNFOLLOW_FAILURE = 'UNFOLLOW_FAILURE';
 export const ADD_POST_TO_ME = 'ADD_POST_TO_ME';
 export const REMOVE_POST_OF_ME = 'REMOVE_POST_OF_ME';
 
-export const loginRequestAction = (data) => ({ type: LOG_IN_REQUEST, data });
+export const loginRequestAction = (data) => ({ type: LOG_IN_REQUEST, data }); // data: {email: '...',password: '...'}
 export const logoutRequestAction = { type: LOG_OUT_REQUEST };
 
 const reducer = (state = initialState, action) => produce(state, (draft)=>{

@@ -18,19 +18,17 @@ import {
   FOLLOW_REQUEST,
 } from '../reducers/user';
 
-// login
-// function logInAPI(data) {
-//   return axios.post("/api/login", data);
-// }
+//login
+function logInAPI(data) {
+  return axios.post('/user/login', data);
+}
 
 function* logIn(action) {
-  yield delay(1000);
   try {
-    // const result = yield call(logInAPI, action.data);
+    const result = yield call(logInAPI, action.data);
     yield put({
       type: LOG_IN_SUCCESS,
-      // data: result.data,
-      data: action.data, // 더미데이터를 위해서 action.data를 씀. email과 password 전달
+      data: result.data, 
     });
   } catch (error) {
     yield put({
@@ -71,7 +69,7 @@ function* watchLogOut() {
 
 // signup
 function signUpAPI(data) {
-  return axios.post('http://localhost:3065/user', data); // data가 백엔드에 req.body에 실려서 감.
+  return axios.post('/user', data); // data가 백엔드에 req.body에 실려서 감.
 }
 
 function* signUp(action) {
