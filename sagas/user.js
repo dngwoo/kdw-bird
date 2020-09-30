@@ -25,7 +25,6 @@ function logInAPI(data) {
 
 function* logIn(action) {
   try {
-    console.log(1);
     const result = yield call(logInAPI, action.data);
     yield put({
       type: LOG_IN_SUCCESS,
@@ -34,7 +33,7 @@ function* logIn(action) {
   } catch (error) {
     yield put({
       type: LOG_IN_FAILURE,
-      data: error.response.data,
+      error: error.response.data
     });
   }
 }
@@ -58,7 +57,7 @@ function* logOut() {
   } catch (error) {
     yield put({
       type: LOG_OUT_FAILURE,
-      data: error.response.data,
+      error: error.response.data,
     });
   }
 }
@@ -109,7 +108,7 @@ function* unFollow(action) {
   } catch (error) {
     yield put({
       type: UNFOLLOW_FAILURE,
-      data: error.response.data,
+      error: error.response.data,
     });
   }
 }
@@ -134,7 +133,7 @@ function* follow(action) {
   } catch (error) {
     yield put({
       type: FOLLOW_FAILURE,
-      data: error.response.data,
+      error: error.response.data,
     });
   }
 }
