@@ -61,7 +61,6 @@ const SignUp = () => {
     if (!term) {
       return setTermError(true);
     }
-    console.log(email, nickname, password, term);
 
     dispatch({
       type: SIGN_UP_REQUEST,

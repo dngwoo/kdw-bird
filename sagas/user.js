@@ -20,11 +20,12 @@ import {
 
 //login
 function logInAPI(data) {
-  return axios.post('/user/login', data);
+  return axios.post('/user/login', data); // data에 이메일과 패스워드가 들어있음.
 }
 
 function* logIn(action) {
   try {
+    console.log(1);
     const result = yield call(logInAPI, action.data);
     yield put({
       type: LOG_IN_SUCCESS,
@@ -47,7 +48,7 @@ function* watchLogin() {
 //   return axios.post("/api/logout");
 // }
 
-function* logOut(action) {
+function* logOut() {
   yield delay(1000);
   try {
     // const result = yield call(logOutAPI);
