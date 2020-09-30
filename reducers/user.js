@@ -31,15 +31,15 @@ const initialState = {
   loginData: {},
 };
 
-const dummyUser = (data) => ({
-  // me에 들어가는 더미데이터
-  ...data,
-  id:1,
-  nickname: '우동우',
-  Posts: [],
-  Followings: [],
-  Followers: [],
-});
+// const dummyUser = (data) => ({
+//   // me에 들어가는 더미데이터
+//   ...data,
+//   id:1,
+//   nickname: '우동우',
+//   Posts: [],
+//   Followings: [],
+//   Followers: [],
+// });
 
 export const LOG_IN_REQUEST = 'LOG_IN_REQUEST';
 export const LOG_IN_SUCCESS = 'LOG_IN_SUCCESS';
@@ -119,7 +119,7 @@ const reducer = (state = initialState, action) => produce(state, (draft)=>{
       case LOG_IN_SUCCESS:
         draft.logInLoading = false;
         draft.logInDone = true;
-        draft.me = dummyUser(action.data); // data 안에는 {email:..., password: ...} 가 들어있음.
+        draft.me = action.data; // data 안에는 {email:..., password: ...} 가 들어있음.
         break;
       case LOG_IN_FAILURE:
         draft.logInLoading = false,

@@ -35,12 +35,21 @@ const SignUp = () => {
     setTerm(e.target.checked);
   }, []);
 
-  const { signUpLoading, signUpDone, signUpError } = useSelector((state) => state.user);
+  const { signUpLoading, signUpDone, signUpError, me } = useSelector((state) => state.user);
   
+  useEffect(()=>{
+    if(me?.id){
+      // replace와 push의 차이점
+      // replace는 이 페이지가 사라짐
+      // push 뒤로가기 기능임
+      Router.replace('/');
+    }
+  }, [me?.id]);
+
   useEffect(()=>{
     // 회원가입이 끝나면 / 로 돌려보낸다. profile.js 와 비슷
     if(signUpDone){
-      Router.push('/');
+      Router.replace('/');
     }
   }, [signUpDone]);
 
