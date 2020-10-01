@@ -21,32 +21,26 @@ import { ADD_POST_TO_ME, REMOVE_POST_OF_ME } from '../reducers/user';
 import shortId from 'shortid';
 
 // addPost
-// function addPostAPI(data) {
-//   return axios.post("/api/post", data);
-// }
+function addPostAPI({content: data}) {
+  return axios.post('/post', {content: data});
+}
 
 function* addPost(action) {
-  yield delay(1000);
-  const id = shortId.generate();
   try {
-    // const result = yield call(addPostAPI, action.data);
+    const result = yield call(addPostAPI, action.data);
     yield put({
       type: ADD_POST_SUCCESS,
-      //   data: result.data,
-      data: {
-        id,
-        content: action.data
-      }
+      data: result.data
     });
 
     yield put({
       type: ADD_POST_TO_ME,
-      data: id
+      data: result.data.id
     });
   } catch (error) {
     yield put({
       type: ADD_POST_FAILURE,
-      data: error.response.data,
+      error: error.response.data,
     });
   }
 }
@@ -56,23 +50,22 @@ function* watchAddPost() {
 }
 
 // addComment
-// function addCommentAPI(data) {
-//   return axios.post(`/api/post/${data.postId}/comment`, data);
-// }
+function addCommentAPI(data) {
+  // Post /post/1/comment <- 1번 포스트에 댓글을 다는구나 라는것을 알게끔 만들어주는것이 좋다.
+  return axios.post(`/post/${data.postId}/comment`, data); // {content: contentText, postId: post.id, userId: id}
+}
 
 function* addComment(action) {
-  yield delay(1000);
   try {
-    // const result = yield call(addPostAPI, action.data);
+    const result = yield call(addPostAPI, action.data);
     yield put({
       type: ADD_COMMENT_SUCCESS,
-      //   data: result.data,
-      data: action.data
+      data: result.data
     });
   } catch (error) {
     yield put({
       type: ADD_COMMENT_FAILURE,
-      data: error.response.data,
+      error: error.response.data,
     });
   }
 }

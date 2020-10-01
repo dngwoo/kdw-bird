@@ -80,25 +80,25 @@ export const addComment = (data) => ({
   data,
 });
 
-const dummyPost = (data) => ({
-  id: data.id,
-  User: {
-    id: 1,
-    nickname: '김동우',
-  },
-  content: data.content,
-  Images: [],
-  Comments: [],
-});
+// const dummyPost = (data) => ({
+//   id: data.id,
+//   User: {
+//     id: 1,
+//     nickname: '김동우',
+//   },
+//   content: data.content,
+//   Images: [],
+//   Comments: [],
+// });
 
-const dummyComment = (data) => ({
-  id: shortId.generate(),
-  User: {
-    id: shortId.generate(),
-    nickname: '김동우',
-  },
-  content: data,
-});
+// const dummyComment = (data) => ({
+//   id: shortId.generate(),
+//   User: {
+//     id: shortId.generate(),
+//     nickname: '김동우',
+//   },
+//   content: data,
+// });
 
 // 이전상태를 액션을 통해 다음 상태로 만들어내는 함수.
 // 단 불변성은 지켜야함.
@@ -129,7 +129,7 @@ const reducer = (state = initialState, action) => produce(state, (draft)=> {
           draft.addPostError = null;
           break;
       case ADD_POST_SUCCESS:
-          draft.mainPosts.unshift(dummyPost(action.data)); 
+          draft.mainPosts.unshift(action.data); 
           draft.addPostLoading = false;
           draft.addPostDone = true;
           break;
@@ -161,8 +161,8 @@ const reducer = (state = initialState, action) => produce(state, (draft)=> {
           draft.addCommentError = null;
           break;
       case ADD_COMMENT_SUCCESS: {         
-          const post = draft.mainPosts.find((v) => v.id === action.data.postId);
-          post.Comments.unshift(dummyComment(action.data.content));
+          const post = draft.mainPosts.find((v) => v.id === action.data.PostId);
+          post.Comments.unshift(action.data);
           draft.addCommentLoading = false;
           draft.addCommentDone = true;
           break;
