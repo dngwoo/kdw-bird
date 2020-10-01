@@ -18,7 +18,6 @@ import {
   ADD_COMMENT_REQUEST,
 } from '../reducers/post';
 import { ADD_POST_TO_ME, REMOVE_POST_OF_ME } from '../reducers/user';
-import shortId from 'shortid';
 
 // addPost
 function addPostAPI({content: data}) {
@@ -57,7 +56,7 @@ function addCommentAPI(data) {
 
 function* addComment(action) {
   try {
-    const result = yield call(addPostAPI, action.data);
+    const result = yield call(addCommentAPI, action.data);
     yield put({
       type: ADD_COMMENT_SUCCESS,
       data: result.data
@@ -142,7 +141,7 @@ function* watchRemoveComment() {
 //   return axios.post(`/api/posts`, data);
 // }
 
-function* loadPosts(action) {
+function* loadPosts() {
   yield delay(1000);
   try {
     // const result = yield call(loadPostsAPI, action.data);
