@@ -1,6 +1,9 @@
 import {produce} from 'immer';
 
 const initialState = {
+  loadMyInfoLoading: false, // 팔로우 시도중
+  loadMyInfoDone: false,
+  loadMyInfoError: null,
 
   followLoading: false, // 팔로우 시도중
   followDone: false,
@@ -41,6 +44,10 @@ const initialState = {
 //   Followers: [],
 // });
 
+export const LOAD_MY_INFO_REQUEST = 'LOAD_MY_INFO_REQUEST';
+export const LOAD_MY_INFO_SUCCESS = 'LOAD_MY_INFO_SUCCESS';
+export const LOAD_MY_INFO_FAILURE = 'LOAD_MY_INFO_FAILURE';
+
 export const LOG_IN_REQUEST = 'LOG_IN_REQUEST';
 export const LOG_IN_SUCCESS = 'LOG_IN_SUCCESS';
 export const LOG_IN_FAILURE = 'LOG_IN_FAILURE';
@@ -76,6 +83,22 @@ const reducer = (state = initialState, action) => produce(state, (draft)=>{
       // 규칙성이 보임.
       // Request 에서는 login 관련된 state 3개를 초기화 (성공할지 실패할지 모르기 때문)
       // Success, Failure은 상황에 맞게 state 값을 바꿔준다.
+
+      //loadMyInfo
+      case LOAD_MY_INFO_REQUEST:
+        draft.loadMyInfoLoading = true;
+        draft.loadMyInfoDone = false;
+        draft.loadMyInfoError = null;
+        break;
+      case LOAD_MY_INFO_SUCCESS:
+        draft.loadMyInfoLoading = false;
+        draft.loadMyInfoDone = true;
+        draft.me = action.data; 
+        break;
+      case LOAD_MY_INFO_FAILURE:
+        draft.loadMyInfoLoading = false,
+        draft.loadMyInfoError = action.error;
+        break;
 
       //follow
       case FOLLOW_REQUEST:
