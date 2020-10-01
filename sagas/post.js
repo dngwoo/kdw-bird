@@ -20,7 +20,7 @@ import {
 import { ADD_POST_TO_ME, REMOVE_POST_OF_ME } from '../reducers/user';
 
 // addPost
-function addPostAPI({content: data}) {
+function addPostAPI(data) {
   return axios.post('/post', {content: data});
 }
 
