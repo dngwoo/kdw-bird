@@ -5,6 +5,14 @@ const initialState = {
   imagePaths: [],
   hasMorePosts: true,
 
+  likePostLoading: false,
+  likePostDone: false,
+  likePostError: null,
+
+  UnlikePostLoading: false,
+  UnlikePostDone: false,
+  UnlikePostError: null,
+
   loadPostLoading: false,
   loadPostDone: false,
   loadPostError: null,
@@ -46,6 +54,13 @@ const initialState = {
 //       }]
 // }));
 
+export const LIKE_POST_REQUEST = 'LIKE_POST_REQUEST';
+export const LIKE_POST_SUCCESS = 'LIKE_POST_SUCCESS';
+export const LIKE_POST_FAILURE = 'LIKE_POST_FAILURE';
+
+export const UNLIKE_POST_REQUEST = 'UNLIKE_POST_REQUEST';
+export const UNLIKE_POST_SUCCESS = 'UNLIKE_POST_SUCCESS';
+export const UNLIKE_POST_FAILURE = 'UNLIKE_POST_FAILURE';
 
 
 export const LOAD_POSTS_REQUEST = 'LOAD_POSTS_REQUEST';
@@ -103,102 +118,140 @@ export const addComment = (data) => ({
 const reducer = (state = initialState, action) => produce(state, (draft)=> {
     // immer는 알아서 다음상태로 만들어준다.
     switch (action.type) {
-      // add post
-      case LOAD_POSTS_REQUEST:
-        draft.loadPostLoading = true;
-        draft.loadPostDone = false;
-        draft.loadPostError = null;
-        break;
-    case LOAD_POSTS_SUCCESS:
-        draft.mainPosts = action.data.concat(draft.mainPosts);
-        draft.loadPostLoading = false;
-        draft.loadPostDone = true;
-        draft.hasMorePosts = draft.mainPosts.length < 50;
-        break;
-    case LOAD_POSTS_FAILURE:
-        draft.loadPostLoading = false;          
-        draft.loadPostError = action.error;
-        break;
 
-      // add post
-      case ADD_POST_REQUEST:
-          draft.addPostLoading = true;
-          draft.addPostDone = false;
-          draft.addPostError = null;
-          break;
-      case ADD_POST_SUCCESS:
-          draft.mainPosts.unshift(action.data); 
-          draft.addPostLoading = false;
-          draft.addPostDone = true;
-          break;
-      case ADD_POST_FAILURE:
-          draft.addPostLoading = false;          
-          draft.addPostError = action.error;
-          break;
+        // 좋아요 추가
+        case LIKE_POST_REQUEST:
+            draft.likePostLoading = true;
+            draft.likePostDone = false;
+            draft.likePostError = null;
+            break;
+        case LIKE_POST_SUCCESS: {
+            const post = draft.mainPosts.find(v=> v.id === action.data.PostId); // 해당 포스터 찾기
+            post.Likers.push({id: action.data.UserId}); // Likers에 누가 좋아요 눌렀는 지 넣기
+            draft.likePostLoading = false;
+            draft.likePostDone = true;
+            break;
+        }
+        case LIKE_POST_FAILURE:
+            draft.likePostLoading = false;          
+            draft.likePostError = action.error;
+            break;
 
-        // remove post
-      case REMOVE_POST_REQUEST:  
-          draft.removePostLoading = true;
-          draft.removePostDone = false;
-          draft.removePostError = null;
-          break;  
-      case REMOVE_POST_SUCCESS:
-          draft.mainPosts = draft.mainPosts.filter((v) => v.id !== action.data);
-          draft.removePostLoading = false;
-          draft.removePostDone = true;
-          break;
+        // 좋아요 취소
+        case UNLIKE_POST_REQUEST:
+            draft.unlikePostLoading = true;
+            draft.unlikePostDone = false;
+            draft.unlikePostError = null;
+            break;
+        case UNLIKE_POST_SUCCESS: {
+            const post = draft.mainPosts.find(v=>v.id === action.data.PostId);
+            post.Likers = post.Likers.filter(v=> v.id !== action.data.UserId); // 원래 splite 쓰는것이 좋음
+            draft.unlikePostLoading = false;
+            draft.unlikePostDone = true;
+            break;
+        }
+        case UNLIKE_POST_FAILURE:
+            draft.unlikePostLoading = false;          
+            draft.unlikePostError = action.error;
+            break;
+        
+
+        // add post
+        case LOAD_POSTS_REQUEST:
+            draft.loadPostLoading = true;
+            draft.loadPostDone = false;
+            draft.loadPostError = null;
+            break;
+        case LOAD_POSTS_SUCCESS:
+            draft.mainPosts = action.data.concat(draft.mainPosts);
+            draft.loadPostLoading = false;
+            draft.loadPostDone = true;
+            draft.hasMorePosts = draft.mainPosts.length < 50;
+            break;
+        case LOAD_POSTS_FAILURE:
+            draft.loadPostLoading = false;          
+            draft.loadPostError = action.error;
+            break;
+
+        // add post
+        case ADD_POST_REQUEST:
+            draft.addPostLoading = true;
+            draft.addPostDone = false;
+            draft.addPostError = null;
+            break;
+        case ADD_POST_SUCCESS:
+            draft.mainPosts.unshift(action.data); 
+            draft.addPostLoading = false;
+            draft.addPostDone = true;
+            break;
+        case ADD_POST_FAILURE:
+            draft.addPostLoading = false;          
+            draft.addPostError = action.error;
+            break;
+
+          // remove post
+        case REMOVE_POST_REQUEST:  
+            draft.removePostLoading = true;
+            draft.removePostDone = false;
+            draft.removePostError = null;
+            break;  
+        case REMOVE_POST_SUCCESS:
+            draft.mainPosts = draft.mainPosts.filter((v) => v.id !== action.data);
+            draft.removePostLoading = false;
+            draft.removePostDone = true;
+            break;
         case REMOVE_POST_FAILURE:
-          draft.removePostLoading = false;
-          draft.removePostError = action.error;
-          break;
-  
-      // add comment
-      case ADD_COMMENT_REQUEST: 
-          draft.addCommentLoading = true;
-          draft.addCommentDone = false;
-          draft.addCommentError = null;
-          break;
-      case ADD_COMMENT_SUCCESS: {         
-          const post = draft.mainPosts.find((v) => v.id === action.data.PostId);
-          post.Comments.unshift(action.data);
-          draft.addCommentLoading = false;
-          draft.addCommentDone = true;
-          break;
-      // const postIndex = state.mainPosts.findIndex((v) => v.id === action.data.postId);
-      // const post = { ...state.mainPosts[postIndex] };
-      // post.Comments = [dummyComment(action.data.content), ...post.Comments];
-      // const mainPosts = [...state.mainPosts];
-      // mainPosts[postIndex] = post;
-      // return {
-      //   ...state,
-      //   mainPosts,
-      //   addCommentLoading: false,
-      //   addCommentDone: true,
-      // };
-      }
-      case ADD_COMMENT_FAILURE:
-          draft.addCommentLoading = false;
-          draft.addCommentError = action.error;
-          break;
-  
-      // // remove comment
-      // case REMOVE_COMMENT_REQUEST:
-      //   draft.removeCommentLoading = true;
-      //   draft.removeCommentDone = false;
-      //   draft.removeCommentError = null;
-      //   break;
-      // case REMOVE_COMMENT_SUCCESS:
-      //   draft.mainPosts.unshift(dummyPost(action.data)) ;
-      //   draft.removeCommentLoading = false;
-      //   draft.removeCommentDone = true;
-      //  break;
-      // case REMOVE_COMMENT_FAILURE:
-      //   draft.removeCommentLoading = false;
-      //   draft.removeCommentError = action.error;
-      //   break;
+            draft.removePostLoading = false;
+            draft.removePostError = action.error;
+            break;
+      
+        // add comment
+        case ADD_COMMENT_REQUEST: 
+            draft.addCommentLoading = true;
+            draft.addCommentDone = false;
+            draft.addCommentError = null;
+            break;
+        case ADD_COMMENT_SUCCESS: {         
+            const post = draft.mainPosts.find((v) => v.id === action.data.PostId);
+            post.Comments.unshift(action.data);
+            draft.addCommentLoading = false;
+            draft.addCommentDone = true;
+            break;
+        // const postIndex = state.mainPosts.findIndex((v) => v.id === action.data.postId);
+        // const post = { ...state.mainPosts[postIndex] };
+        // post.Comments = [dummyComment(action.data.content), ...post.Comments];
+        // const mainPosts = [...state.mainPosts];
+        // mainPosts[postIndex] = post;
+        // return {
+        //   ...state,
+        //   mainPosts,
+        //   addCommentLoading: false,
+        //   addCommentDone: true,
+        // };
+        }
+        case ADD_COMMENT_FAILURE:
+            draft.addCommentLoading = false;
+            draft.addCommentError = action.error;
+            break;
+      
+          // // remove comment
+          // case REMOVE_COMMENT_REQUEST:
+          //   draft.removeCommentLoading = true;
+          //   draft.removeCommentDone = false;
+          //   draft.removeCommentError = null;
+          //   break;
+          // case REMOVE_COMMENT_SUCCESS:
+          //   draft.mainPosts.unshift(dummyPost(action.data)) ;
+          //   draft.removeCommentLoading = false;
+          //   draft.removeCommentDone = true;
+          //  break;
+          // case REMOVE_COMMENT_FAILURE:
+          //   draft.removeCommentLoading = false;
+          //   draft.removeCommentError = action.error;
+          //   break;
 
-      default:
-        break;
+        default:
+          break;
     }
   });
  

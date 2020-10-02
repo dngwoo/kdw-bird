@@ -10,6 +10,12 @@ import {
   LOAD_POSTS_SUCCESS,
   LOAD_POSTS_FAILURE,
   LOAD_POSTS_REQUEST,
+  LIKE_POST_REQUEST, 
+  LIKE_POST_SUCCESS,
+  LIKE_POST_FAILURE,
+  UNLIKE_POST_REQUEST, 
+  UNLIKE_POST_SUCCESS,
+  UNLIKE_POST_FAILURE
 } from '../reducers/post';
 import {
   ADD_COMMENT_SUCCESS,
@@ -17,6 +23,54 @@ import {
   ADD_COMMENT_REQUEST,
 } from '../reducers/post';
 import { ADD_POST_TO_ME, REMOVE_POST_OF_ME } from '../reducers/user';
+
+// likePost
+function likePostAPI(data) {
+  return axios.patch(`/post/${data}/like`); // patch는 일부분 수정할 때 사용
+}
+
+function* likePost(action) {
+  try {
+    const result = yield call(likePostAPI, action.data);
+    yield put({
+      type: LIKE_POST_SUCCESS,
+      data: result.data // { PostId: post.id, UserId: req.user.id }
+    });
+  } catch (error) {
+    yield put({
+      type: LIKE_POST_FAILURE,
+      error: error.response.data,
+    });
+  }
+}
+
+function* watchLikePost() {
+  yield takeLatest(LIKE_POST_REQUEST, likePost);
+}
+
+// unlikePost
+function unlikePostAPI(data) {
+  return axios.delete(`/post/${data}/like`);  // /post/1/like
+}
+
+function* unlikePost(action) {
+  try {
+    const result = yield call(unlikePostAPI, action.data); // post.id를 받아옴
+    yield put({
+      type: UNLIKE_POST_SUCCESS,
+      data: result.data // { PostId: post.id, UserId: req.user.id }
+    });
+  } catch (error) {
+    yield put({
+      type: UNLIKE_POST_FAILURE,
+      error: error.response.data,
+    });
+  }
+}
+
+function* watchUnlikePost() {
+  yield takeLatest(UNLIKE_POST_REQUEST, unlikePost);
+}
 
 // addPost
 function addPostAPI(data) {
@@ -165,6 +219,8 @@ function* watchLoadPosts() {
 export default function* postSaga() {
   yield all(
     [
+      fork(watchLikePost), 
+      fork(watchUnlikePost), 
       fork(watchLoadPosts), 
       fork(watchAddPost), 
       fork(watchAddComment), 
