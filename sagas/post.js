@@ -1,4 +1,4 @@
-import { call, fork, takeLatest, delay, put, all, throttle } from 'redux-saga/effects';
+import { call, fork, takeLatest, put, all, throttle } from 'redux-saga/effects';
 import axios from 'axios';
 import {
   ADD_POST_REQUEST,
@@ -15,7 +15,10 @@ import {
   LIKE_POST_FAILURE,
   UNLIKE_POST_REQUEST, 
   UNLIKE_POST_SUCCESS,
-  UNLIKE_POST_FAILURE
+  UNLIKE_POST_FAILURE, 
+  REMOVE_COMMENT_REQUEST, 
+  REMOVE_COMMENT_SUCCESS, 
+  REMOVE_COMMENT_FAILURE
 } from '../reducers/post';
 import {
   ADD_COMMENT_SUCCESS,
@@ -128,26 +131,23 @@ function* watchAddComment() {
 }
 
 // reomvePost
-// function reomveAPI(data) {
-//   return axios.post(`/api/post/${data.postId}/comment`, data);
-// }
+function removePostAPI(data) {
+  return axios.delete(`/post/${data}`);
+}
 
 function* removePost(action) {
-  yield delay(1000);
-
   // PostCard 갯수 줄이기
   try {
-    // const result = yield call(removePostAPI, action.data);
+    const result = yield call(removePostAPI, action.data); // post.id
     yield put({
       type: REMOVE_POST_SUCCESS,
-      //   data: result.data,
-      data: action.data // 어떤 데이터가 지워지는지에 대한 id 값
+      data: result.data // 어떤 데이터가 지워지는지에 대한 post의 id 값
     });
 
     // userProfile.js에서 짹짹 갯수 줄이기
     yield put({
       type: REMOVE_POST_OF_ME,
-      data: action.data // 어떤 데이터가 지워지는지에 대한 id 값
+      data: result.data // 어떤 데이터가 지워지는지에 대한 post의 id 값
     });
 
   } catch (error) {
@@ -168,27 +168,27 @@ function* watchRemovePost() {
 //   return axios.post(`/api/post/${data.postId}/comment`, data);
 // }
 
-function* removeComment(action) {
-  yield delay(1000);
-  try {
-    // const result = yield call(removePostAPI, action.data);
-    yield put({
-      type: REMOVE_POST_SUCCESS,
-      //   data: result.data,
-      data: action.data // 어떤 데이터가 지워지는지에 대한 id 값
-    });
+// function* removeComment(action) {
+//   yield delay(1000);
+//   try {
+//     // const result = yield call(removePostAPI, action.data);
+//     yield put({
+//       type: REMOVE_COMMENT_SUCCESS,
+//       //   data: result.data,
+//       data: action.data // 어떤 데이터가 지워지는지에 대한 id 값
+//     });
 
-  } catch (error) {
-    yield put({
-      type: REMOVE_POST_FAILURE,
-      error: error.response.data,
-    });
-  }
-}
+//   } catch (error) {
+//     yield put({
+//       type: REMOVE_COMMENT_FAILURE,
+//       error: error.response.data,
+//     });
+//   }
+// }
 
-function* watchRemoveComment() {
-  yield takeLatest(REMOVE_POST_REQUEST, removeComment);
-}
+// function* watchRemoveComment() {
+//   yield takeLatest(REMOVE_COMMENT_REQUEST, removeComment);
+// }
 
 // loadPost
 function loadPostsAPI() {
@@ -225,7 +225,7 @@ export default function* postSaga() {
       fork(watchAddPost), 
       fork(watchAddComment), 
       fork(watchRemovePost), 
-      fork(watchRemoveComment)
+      // fork(watchRemoveComment)
     ]
   );
 }
