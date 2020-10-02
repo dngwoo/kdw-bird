@@ -102,14 +102,12 @@ function signUpAPI(data) {
 
 function* signUp(action) {
   try {
-    const result = yield call(signUpAPI, action.data);
-    console.log(result);
+    yield call(signUpAPI, action.data);
     yield put({
       type: SIGN_UP_SUCCESS,
-      //   data: result.data,
     });
   } catch (error) {
-    console.log(error.response.data);
+    console.error(error.response.data);
     yield put({
       type: SIGN_UP_FAILURE,
       error: error.response.data,
@@ -146,11 +144,7 @@ function* watchUnFollow() {
   yield takeLatest(UNFOLLOW_REQUEST, unFollow);
 }
 
-// signup
-// function signUpAPI() {
-//   return axios.post("/api/signup");
-// }
-
+// follow
 function* follow(action) {
   yield delay(1000);
   try {

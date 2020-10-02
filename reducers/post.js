@@ -1,6 +1,4 @@
-import shortId from 'shortid';
 import { produce } from 'immer';
-import faker from 'faker';
 
 const initialState = {
   mainPosts: [],
@@ -28,25 +26,25 @@ const initialState = {
   removeCommentError: null,
 };
 
-export const generateDummyPost = (number) => Array(number).fill().map(()=>({
-      id: shortId.generate(),
-      User: {
-        id:shortId.generate(),
-        nickname: faker.name.findName()
-      },
-      content: faker.lorem.paragraph(),
-      Images: [{
-        src: faker.image.image()
-      }],
-      Comments: [{
-        id:shortId.generate(),
-        User:{
-          id: shortId.generate(),
-          nickname: faker.name.findName()
-        },
-        content: faker.lorem.sentence()
-      }]
-}));
+// export const generateDummyPost = (number) => Array(number).fill().map(()=>({
+//       id: shortId.generate(),
+//       User: {
+//         id:shortId.generate(),
+//         nickname: faker.name.findName()
+//       },
+//       content: faker.lorem.paragraph(),
+//       Images: [{
+//         src: faker.image.image()
+//       }],
+//       Comments: [{
+//         id:shortId.generate(),
+//         User:{
+//           id: shortId.generate(),
+//           nickname: faker.name.findName()
+//         },
+//         content: faker.lorem.sentence()
+//       }]
+// }));
 
 
 

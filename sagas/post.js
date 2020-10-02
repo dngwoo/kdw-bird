@@ -9,7 +9,6 @@ import {
   REMOVE_POST_FAILURE,
   LOAD_POSTS_SUCCESS,
   LOAD_POSTS_FAILURE,
-  generateDummyPost,
   LOAD_POSTS_REQUEST,
 } from '../reducers/post';
 import {
@@ -62,6 +61,7 @@ function* addComment(action) {
       data: result.data
     });
   } catch (error) {
+    console.error(error);
     yield put({
       type: ADD_COMMENT_FAILURE,
       error: error.response.data,
@@ -99,7 +99,7 @@ function* removePost(action) {
   } catch (error) {
     yield put({
       type: REMOVE_POST_FAILURE,
-      data: error.response.data,
+      error: error.response.data,
     });
   }
 }
@@ -127,7 +127,7 @@ function* removeComment(action) {
   } catch (error) {
     yield put({
       type: REMOVE_POST_FAILURE,
-      data: error.response.data,
+      error: error.response.data,
     });
   }
 }
@@ -137,23 +137,22 @@ function* watchRemoveComment() {
 }
 
 // loadPost
-// function loadPostsAPI(data) {
-//   return axios.post(`/api/posts`, data);
-// }
+function loadPostsAPI() {
+  return axios.get('/posts');
+}
 
 function* loadPosts() {
-  yield delay(1000);
   try {
-    // const result = yield call(loadPostsAPI, action.data);
+    const result = yield call(loadPostsAPI);
     yield put({
       type: LOAD_POSTS_SUCCESS,
-      data: generateDummyPost(10)
+      data: result.data
     });
 
   } catch (error) {
     yield put({
       type: LOAD_POSTS_FAILURE,
-      data: error.response.data,
+      error: error.response.data,
     });
   }
 }

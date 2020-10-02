@@ -124,12 +124,13 @@ const PostCard = ({ post }) => {
 
 PostCard.propTypes = {
   post: PropTypes.shape({
+    id: PropTypes.number,
     User: PropTypes.object,
     content: PropTypes.string,
-    Images: PropTypes.arrayOf(PropTypes.any),
-    Comments: PropTypes.arrayOf(PropTypes.any),
-    id: PropTypes.string
-  }),
+    Images: PropTypes.arrayOf(PropTypes.object),
+    Comments: PropTypes.arrayOf(PropTypes.object),
+    createdAt: PropTypes.string,
+  }).isRequired,
 };
 
 export default PostCard;

@@ -36,9 +36,9 @@ Followbutton.propTypes = {
     post: PropTypes.shape({
         User: PropTypes.object,
         content: PropTypes.string,
-        Images: PropTypes.arrayOf(PropTypes.any),
-        Comments: PropTypes.arrayOf(PropTypes.any),
-        id: PropTypes.string
+        Images: PropTypes.arrayOf(PropTypes.object),
+        Comments: PropTypes.arrayOf(PropTypes.object),
+        id: PropTypes.number
     }),
 };
 
