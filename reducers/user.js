@@ -1,7 +1,20 @@
 import {produce} from 'immer';
 
 const initialState = {
-  loadMyInfoLoading: false, // 팔로우 시도중
+
+  RemoveFollowerLoading: false, // 팔로우 삭제 시도중
+  RemoveFollowerDone: false,
+  RemoveFollowerError: null,
+
+  loadFollowersLoading: false, // 팔로우 가져오기 시도중
+  loadFollowersDone: false,
+  loadFollowersError: null,
+
+  loadFollowingsLoading: false, // 팔로잉 가져오기 시도중
+  loadFollowingsDone: false,
+  loadFollowingsError: null,
+
+  loadMyInfoLoading: false, // 내 정보 가져오기 시도중
   loadMyInfoDone: false,
   loadMyInfoError: null,
 
@@ -44,6 +57,18 @@ const initialState = {
 //   Followers: [],
 // });
 
+export const REMOVE_FOLLOWER_REQUEST = 'REMOVE_FOLLOWERS_REQUEST';
+export const REMOVE_FOLLOWER_SUCCESS = 'REMOVE_FOLLOWERS_SUCCESS';
+export const REMOVE_FOLLOWER_FAILURE = 'REMOVE_FOLLOWERS_FAILURE';
+
+export const LOAD_FOLLOWERS_REQUEST = 'LOAD_FOLLOWERS_REQUEST';
+export const LOAD_FOLLOWERS_SUCCESS = 'LOAD_FOLLOWERS_SUCCESS';
+export const LOAD_FOLLOWERS_FAILURE = 'LOAD_FOLLOWERS_FAILURE';
+
+export const LOAD_FOLLOWINGS_REQUEST = 'LOAD_FOLLOWINGS_REQUEST';
+export const LOAD_FOLLOWINGS_SUCCESS = 'LOAD_FOLLOWINGS_SUCCESS';
+export const LOAD_FOLLOWINGS_FAILURE = 'LOAD_FOLLOWINGS_FAILURE';
+
 export const LOAD_MY_INFO_REQUEST = 'LOAD_MY_INFO_REQUEST';
 export const LOAD_MY_INFO_SUCCESS = 'LOAD_MY_INFO_SUCCESS';
 export const LOAD_MY_INFO_FAILURE = 'LOAD_MY_INFO_FAILURE';
@@ -83,6 +108,53 @@ const reducer = (state = initialState, action) => produce(state, (draft)=>{
       // 규칙성이 보임.
       // Request 에서는 login 관련된 state 3개를 초기화 (성공할지 실패할지 모르기 때문)
       // Success, Failure은 상황에 맞게 state 값을 바꿔준다.
+      //removeFollowers
+      case REMOVE_FOLLOWER_REQUEST:
+        draft.removeFollowerLoading = true;
+        draft.removeFollowerDone = false;
+        draft.removeFollowerError = null;
+        break;
+      case REMOVE_FOLLOWER_SUCCESS:
+        draft.removeFollowerLoading = false;
+        draft.removeFollowerDone = true;
+        draft.me.Followers = draft.me.Followers.filter(v=>v.id !== action.data.UserId);
+        break;
+      case REMOVE_FOLLOWER_FAILURE:
+        draft.removeFollowerLoading = false,
+        draft.removeFollowerError = action.error;
+        break;
+
+      //loadFollowers
+      case LOAD_FOLLOWERS_REQUEST:
+        draft.loadFollowersLoading = true;
+        draft.loadFollowersDone = false;
+        draft.loadFollowersError = null;
+        break;
+      case LOAD_FOLLOWERS_SUCCESS:
+        draft.loadFollowersLoading = false;
+        draft.loadFollowersDone = true;
+        draft.me.Followers = action.data;
+        break;
+      case LOAD_FOLLOWERS_FAILURE:
+        draft.loadFollowersLoading = false,
+        draft.loadFollowersError = action.error;
+        break;
+
+      //loadFollowings
+      case LOAD_FOLLOWINGS_REQUEST:
+        draft.loadFollowingsLoading = true;
+        draft.loadFollowingsDone = false;
+        draft.loadFollowingsError = null;
+        break;
+      case LOAD_FOLLOWINGS_SUCCESS:
+        draft.loadFollowingsLoading = false;
+        draft.loadFollowingsDone = true;
+        draft.me.Followings = action.data;
+        break;
+      case LOAD_FOLLOWINGS_FAILURE:
+        draft.loadFollowingsLoading = false,
+        draft.loadFollowingsError = action.error;
+        break;
 
       //loadMyInfo
       case LOAD_MY_INFO_REQUEST:
@@ -109,7 +181,7 @@ const reducer = (state = initialState, action) => produce(state, (draft)=>{
       case FOLLOW_SUCCESS:
         draft.followLoading = false;
         draft.followDone = true;
-        draft.me.Followings.push({id: action.data}); // post.User.id
+        draft.me.Followings.push({id: action.data.UserId});
         break;
       case FOLLOW_FAILURE:
         draft.followLoading = false,
@@ -126,7 +198,7 @@ const reducer = (state = initialState, action) => produce(state, (draft)=>{
         draft.unFollowLoading = false;
         draft.unFollowDone = true;
         // 원래는 불변성을 안지키기 위해서 splice 사용하는게 맞음
-        draft.me.Followings = draft.me.Followings.filter(v=> v.id !== action.data); // post.User.id, 해당 id를 가진애 뺴고 다시 반환
+        draft.me.Followings = draft.me.Followings.filter(v=> v.id !== action.data.UserId); 
         break;
       case UNFOLLOW_FAILURE:
         draft.unFollowLoading = false,

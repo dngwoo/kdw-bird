@@ -11,17 +11,25 @@ function Followbutton({post}) {
     
     const onClickButton = useCallback(()=> {
         if(isFollowing){
+            // 팔로잉하고 있으면
             dispatch({
                 type: UNFOLLOW_REQUEST,
                 data: post.User.id
             });
         } else{
+            // 팔로잉 하고 있지 않다면
             dispatch({
                 type: FOLLOW_REQUEST,
                 data: post.User.id
             });
         }
     },[isFollowing]);
+
+    if(post.User.id === me.id){
+        // 게시글 주인이 나라면 팔로우 버튼을 보여주지 않는다.
+        return null;
+    }
+
     return (
         <Button loading={followLoading || unFollowLoading} 
         onClick={onClickButton}

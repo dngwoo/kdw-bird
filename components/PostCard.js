@@ -62,7 +62,6 @@ const PostCard = ({ post }) => {
   },[]);
 
   // 좋아요 누른 사람중에 내가 있는지 찾음.
-  console.log(post);
   const liked = post.Likers.find((v) => v.id === id);
   
   return (
