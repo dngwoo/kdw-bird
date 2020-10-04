@@ -9,7 +9,14 @@ import { LOAD_MY_INFO_REQUEST } from '../reducers/user';
 const Home = () => {
   const dispatch = useDispatch();
   const { me } = useSelector((state) => state.user);
-  const { mainPosts, hasMorePosts,  loadPostLoading } = useSelector((state) => state.post);
+  const { mainPosts, hasMorePosts,  loadPostLoading, retweetError } = useSelector((state) => state.post);
+
+  // 자기자신을 리트윗 했을 때 등 에러났을 경우
+  useEffect(() => {
+    if (retweetError) {
+      alert(retweetError);
+    }
+  }, [retweetError]);
 
   useEffect(()=>{
     dispatch({

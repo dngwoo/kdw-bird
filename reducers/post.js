@@ -5,6 +5,10 @@ const initialState = {
   imagePaths: [],
   hasMorePosts: true,
 
+  retweetLoading: false,
+  retweetDone: false,
+  retweetError: null,
+
   uploadPostLoading: false,
   uploadPostDone: false,
   uploadPostError: null,
@@ -57,6 +61,10 @@ const initialState = {
 //         content: faker.lorem.sentence()
 //       }]
 // }));
+
+export const RETWEET_REQUEST = 'RETWEET_REQUEST';
+export const RETWEET_SUCCESS = 'RETWEET_SUCCESS';
+export const RETWEET_FAILURE = 'RETWEET_FAILURE';
 
 export const REMOVE_IMAGE = 'REMOVE_IMAGE';
 
@@ -123,6 +131,23 @@ export const addComment = (data) => ({
 const reducer = (state = initialState, action) => produce(state, (draft)=> {
     // immer는 알아서 다음상태로 만들어준다.
     switch (action.type) {
+        // add retweet
+        case RETWEET_REQUEST:
+            draft.retweetLoading = true;
+            draft.retweetDone = false;
+            draft.retweetError = null;
+            break;
+        case RETWEET_SUCCESS: 
+            draft.retweetLoading = false;
+            draft.retweetDone = true;
+            draft.mainPosts.unshift(action.data);
+            break;
+        case RETWEET_FAILURE:
+            draft.retweetLoading = false;          
+            draft.retweetError = action.error;
+            break;
+
+        
         // 이미지 삭제
         case REMOVE_IMAGE:
             draft.imagePaths = draft.imagePaths.filter((v,i)=> i!== action.data);
