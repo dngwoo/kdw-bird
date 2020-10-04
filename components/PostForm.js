@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button, Form, Input } from 'antd';
-import { addPost, UPLOAD_IMAGES_REQUEST } from '../reducers/post';
+import { addPost, ADD_POST_REQUEST, REMOVE_IMAGE, UPLOAD_IMAGES_REQUEST } from '../reducers/post';
 import useInput from '../hooks/useInput';
 
 const PostForm = () => {
@@ -19,9 +19,25 @@ const PostForm = () => {
 
   const dispatch = useDispatch();
   const onSubmit = useCallback(() => {
-    dispatch(addPost(text));
-  }, [text]);
+    // 게시글이 없다면
+    if(!text || !text.trim()){
+      return alert('게시글을 작성하세요');
+    }
 
+    // 게시글이 있다면
+    const formData = new FormData();
+    imagePaths.forEach(p=>{
+      formData.append('image', p);
+    });
+    formData.append('content', text);
+
+    return dispatch({
+      type: ADD_POST_REQUEST,
+      data: formData
+    });
+  }, [text, imagePaths]);
+
+  // 이미지 추가 기능
   const onChangeImages = useCallback((e)=>{
     console.log('images', e.target.files); // 올린 이미지 확인 가능, e.target.files는 유사배열임.
     const imageFomeData = new FormData();
@@ -37,6 +53,14 @@ const PostForm = () => {
   const onClickImageUpload = useCallback(() => {
     imageInput.current.click(); // 버튼이 클릭 되면 input을 클릭
   }, [imageInput.current]);
+
+  // 이미지 제거 기능
+  const onRemoveImage = useCallback((index)=>()=>{
+    dispatch({
+      type: REMOVE_IMAGE,
+      data: index
+    });
+  });
 
   return (
     <Form
@@ -64,12 +88,12 @@ const PostForm = () => {
       </div>
       <div>
         {imagePaths &&
-          imagePaths.map((imagePath) => {
+          imagePaths.map((imagePath, i) => {
             return (
-              <div key={imagePath}>
-                <img src={imagePath} />
+              <div key={imagePath} style={{ display: 'inline-block'}}>
+                <img src={`http://localhost:3065/${imagePath}`} style={{width: '200px'}} alt={imagePath}/>
                 <div>
-                  <Button>제거</Button>
+                  <Button onClick={onRemoveImage(i)}>제거</Button>
                 </div>
               </div>
             );

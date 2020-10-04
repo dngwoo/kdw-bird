@@ -101,7 +101,7 @@ function* watchUnlikePost() {
 
 // addPost
 function addPostAPI(data) {
-  return axios.post('/post', {content: data});
+  return axios.post('/post', data); // formData임. imagePaths와 content가 들어있음.
 }
 
 function* addPost(action) {

@@ -58,6 +58,8 @@ const initialState = {
 //       }]
 // }));
 
+export const REMOVE_IMAGE = 'REMOVE_IMAGE';
+
 export const UPLOAD_IMAGES_REQUEST = 'UPLOAD_IMAGES_REQUEST';
 export const UPLOAD_IMAGES_SUCCESS = 'UPLOAD_IMAGES_SUCCESS';
 export const UPLOAD_IMAGES_FAILURE = 'UPLOAD_IMAGES_FAILURE';
@@ -126,6 +128,11 @@ export const addComment = (data) => ({
 const reducer = (state = initialState, action) => produce(state, (draft)=> {
     // immer는 알아서 다음상태로 만들어준다.
     switch (action.type) {
+        // 이미지 삭제
+        case REMOVE_IMAGE:
+            draft.imagePaths = draft.imagePaths.filter((v,i)=> i!== action.data);
+            break;
+
         // 좋아요 추가
         case UPLOAD_IMAGES_REQUEST:
             draft.uploadImagesLoading = true;
@@ -191,6 +198,7 @@ const reducer = (state = initialState, action) => produce(state, (draft)=> {
             draft.loadPostLoading = false;
             draft.loadPostDone = true;
             draft.hasMorePosts = draft.mainPosts.length < 50;
+            draft.imagePaths = []; // 포스트 추가 하고 초기화해줘야 PostForm에 이미지가 사라짐.
             break;
         case LOAD_POSTS_FAILURE:
             draft.loadPostLoading = false;          
