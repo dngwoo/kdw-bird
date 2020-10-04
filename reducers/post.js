@@ -198,7 +198,6 @@ const reducer = (state = initialState, action) => produce(state, (draft)=> {
             draft.loadPostLoading = false;
             draft.loadPostDone = true;
             draft.hasMorePosts = draft.mainPosts.length < 50;
-            draft.imagePaths = []; // 포스트 추가 하고 초기화해줘야 PostForm에 이미지가 사라짐.
             break;
         case LOAD_POSTS_FAILURE:
             draft.loadPostLoading = false;          
@@ -215,6 +214,7 @@ const reducer = (state = initialState, action) => produce(state, (draft)=> {
             draft.mainPosts.unshift(action.data); 
             draft.addPostLoading = false;
             draft.addPostDone = true;
+            draft.imagePaths = []; // 포스트 추가 하고 초기화해줘야 PostForm에 이미지가 사라짐.
             break;
         case ADD_POST_FAILURE:
             draft.addPostLoading = false;          
