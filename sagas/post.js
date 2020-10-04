@@ -18,7 +18,7 @@ import {
   UNLIKE_POST_FAILURE, 
   REMOVE_COMMENT_REQUEST, 
   REMOVE_COMMENT_SUCCESS, 
-  REMOVE_COMMENT_FAILURE
+  REMOVE_COMMENT_FAILURE, UPLOAD_IMAGES_REQUEST, UPLOAD_IMAGES_SUCCESS, UPLOAD_IMAGES_FAILURE
 } from '../reducers/post';
 import {
   ADD_COMMENT_SUCCESS,
@@ -26,6 +26,30 @@ import {
   ADD_COMMENT_REQUEST,
 } from '../reducers/post';
 import { ADD_POST_TO_ME, REMOVE_POST_OF_ME } from '../reducers/user';
+
+// uploadImages
+function uploadImagesAPI(data) {
+  return axios.post('/post/images', data); // form 데이터는 { file: data } 이런식으로 감싸면 절대 안된다. json으로 만들어지기 때문
+}
+
+function* uploadImages(action) {
+  try {
+    const result = yield call(uploadImagesAPI, action.data); // file
+    yield put({
+      type: UPLOAD_IMAGES_SUCCESS,
+      data: result.data // 제로초15184712891.png
+    });
+  } catch (error) {
+    yield put({
+      type: UPLOAD_IMAGES_FAILURE,
+      error: error.response.data,
+    });
+  }
+}
+
+function* watchUploadImages() {
+  yield takeLatest(UPLOAD_IMAGES_REQUEST, uploadImages);
+}
 
 // likePost
 function likePostAPI(data) {
@@ -219,6 +243,7 @@ function* watchLoadPosts() {
 export default function* postSaga() {
   yield all(
     [
+      fork(watchUploadImages),
       fork(watchLikePost), 
       fork(watchUnlikePost), 
       fork(watchLoadPosts), 
