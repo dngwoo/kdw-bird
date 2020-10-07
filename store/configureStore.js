@@ -1,4 +1,4 @@
-import { createWrapper } from 'next-redux-wrapper';
+import { createWrapper } from 'next-redux-wrapper'; // 이걸로 개별페이지의 서버사이드렌더링을 구현한다.
 import { createStore, applyMiddleware, compose } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import createSagaMiddleware from 'redux-saga';
