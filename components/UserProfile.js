@@ -35,7 +35,7 @@ const UserProfile = () => {
         <Card.Meta
           avatar={
             <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png">
-              {me}
+              {me.nickname[0]}
             </Avatar>
           }
           title={`${me.nickname}님 환영합니다.`}

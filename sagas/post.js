@@ -194,6 +194,7 @@ function* removePost(action) {
   // PostCard 갯수 줄이기
   try {
     const result = yield call(removePostAPI, action.data); // post.id
+    console.log(result.data);
     yield put({
       type: REMOVE_POST_SUCCESS,
       data: result.data // 어떤 데이터가 지워지는지에 대한 post의 id 값
@@ -246,13 +247,14 @@ function* watchRemovePost() {
 // }
 
 // loadPost
-function loadPostsAPI() {
-  return axios.get('/posts');
+function loadPostsAPI(data) {
+  // get의 데이터 캐싱이 가능하다. post,pust,patch은 캐싱 불가.
+  return axios.get(`/posts?lastId=${data || 0}`); // 쿼리 스트링 형태, get으로 데이터보낼때 사용함.
 }
 
-function* loadPosts() {
+function* loadPosts(action) {
   try {
-    const result = yield call(loadPostsAPI);
+    const result = yield call(loadPostsAPI, action.data);
     yield put({
       type: LOAD_POSTS_SUCCESS,
       data: result.data
@@ -267,7 +269,7 @@ function* loadPosts() {
 }
 
 function* watchLoadPosts() {
-  yield throttle(2000, LOAD_POSTS_REQUEST, loadPosts);
+  yield throttle(5000, LOAD_POSTS_REQUEST, loadPosts);
 }
 
 

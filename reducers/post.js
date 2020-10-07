@@ -214,10 +214,10 @@ const reducer = (state = initialState, action) => produce(state, (draft)=> {
             draft.loadPostError = null;
             break;
         case LOAD_POSTS_SUCCESS:
-            draft.mainPosts = action.data.concat(draft.mainPosts);
+            draft.mainPosts = draft.mainPosts.concat(action.data);
             draft.loadPostLoading = false;
             draft.loadPostDone = true;
-            draft.hasMorePosts = draft.mainPosts.length < 50;
+            draft.hasMorePosts = draft.mainPosts.length === 10;
             break;
         case LOAD_POSTS_FAILURE:
             draft.loadPostLoading = false;          
@@ -247,11 +247,14 @@ const reducer = (state = initialState, action) => produce(state, (draft)=> {
             draft.removePostDone = false;
             draft.removePostError = null;
             break;  
-        case REMOVE_POST_SUCCESS:
-            draft.mainPosts = draft.mainPosts.filter((v) => v.id !== action.data.PostId);
+        case REMOVE_POST_SUCCESS:{
+            console.log(REMOVE_POST_SUCCESS, action.data);
+            const index = draft.mainPosts.findIndex(v=>v.id === action.data.PostId);
+            draft.mainPosts.splice(index, 1);
             draft.removePostLoading = false;
             draft.removePostDone = true;
             break;
+        }
         case REMOVE_POST_FAILURE:
             draft.removePostLoading = false;
             draft.removePostError = action.error;

@@ -33,8 +33,10 @@ const Home = () => {
       console.log(window.scrollY, document.documentElement.clientHeight, document.documentElement.scrollHeight);
       if( window.scrollY + document.documentElement.clientHeight > document.documentElement.scrollHeight - 300){
       if(hasMorePosts && !loadPostLoading){
+          const lastId = mainPosts[mainPosts.length - 1]?.id; // 가장 마지막 포스트의 id를 들고옴
           dispatch({
-            type: LOAD_POSTS_REQUEST
+            type: LOAD_POSTS_REQUEST,
+            lastId
           });
         }
       }
