@@ -5,7 +5,7 @@ import 'antd/dist/antd.css';
 import wrapper from '../store/configureStore';
 
 
-const _app = ({ Component }) => {
+const _app = ({ Component }) => { // 여기로 모든 컴포넌트가 들어가게 된다.
   return (
     <>
       <Head>

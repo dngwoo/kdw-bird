@@ -24,6 +24,9 @@ const Home = () => {
   useEffect(()=>{
     // 화면이 끝까지 내려졌을 때 LOAD_POSTS_REQUEST를 발생시켜서 데이터를 더 받아옴.
     function onScroll(){
+      // document.documentElement.scrollHeight 현재 스크롤 높이
+      // document.documentElement.clientHeight 화면 높이
+      // window.scrollY // 스크롤 포함한 화면 높이
       console.log(window.scrollY, document.documentElement.clientHeight, document.documentElement.scrollHeight);
       if( window.scrollY + document.documentElement.clientHeight > document.documentElement.scrollHeight - 300){
       if(hasMorePosts && !loadPostLoading){
@@ -61,8 +64,8 @@ export const getServerSideProps = wrapper.getServerSideProps(async (context)=>{
   console.log('getServerSideProps start');
   console.log(context);
   console.log(context.req.headers);
-  const cookie = context.req ? context.req.headers.cookie : '';
-  axios.defaults.headers.Cookie = '';
+  const cookie = context.req ? context.req.headers.cookie : ''; // 프론트 서버에서 쿠키가 담겨져있는 위치
+  axios.defaults.headers.Cookie = ''; // 다른사람 쿠키로 접속되어버릴수도 있기 떄문에 한번 비워줘야 된다.
   if (context.req && cookie) {
     axios.defaults.headers.Cookie = cookie;
   }
